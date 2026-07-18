@@ -22,6 +22,7 @@
           <span class="search-icon">🔍</span>
         </div>
         <button id="favoritesBtn" class="btn btn--icon" title="Избранное">❤️ <span id="favoritesCount">0</span></button>
+        <button id="compareBtn" class="btn btn--icon" title="Сравнить породы">🆚</button>
       </div>
     </div>
   </header>
@@ -271,6 +272,31 @@
             <!-- Заполняется через JS -->
           </div>
           <button class="btn btn--outline test-result__restart" id="testRestart" style="display:none">🔄 Пройти заново</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== МОДАЛКА СРАВНЕНИЯ ===== -->
+  <div id="compareModal" class="modal">
+    <div class="modal__overlay" id="compareOverlay"></div>
+    <div class="modal__content modal__content--compare">
+      <button class="modal__close" id="compareClose">&times;</button>
+      <h2 class="compare__title">🆚 Сравнение пород</h2>
+      <div id="compareBody">
+        <div class="compare__selectors">
+          <div class="compare__selector">
+            <label>Порода 1</label>
+            <select id="compareSelect1" class="compare__select"></select>
+          </div>
+          <div class="compare__vs">VS</div>
+          <div class="compare__selector">
+            <label>Порода 2</label>
+            <select id="compareSelect2" class="compare__select"></select>
+          </div>
+        </div>
+        <div id="compareTable" class="compare__table">
+          <!-- Заполняется через JS -->
         </div>
       </div>
     </div>

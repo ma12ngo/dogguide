@@ -340,6 +340,25 @@ img {
   color: #E74C3C;
 }
 
+.breed-card__actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.breed-card__compare {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  padding: 2px;
+}
+
+.breed-card__compare:hover {
+  transform: scale(1.2);
+}
+
 /* ===== МОДАЛЬНОЕ ОКНО ===== */
 .modal {
   display: none;
@@ -687,6 +706,135 @@ img {
 
 .test-result__restart {
   margin-top: 10px;
+}
+
+/* ===== СРАВНЕНИЕ ПОРОД ===== */
+.modal__content--compare {
+  max-width: 800px;
+}
+
+.compare__title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.compare__selectors {
+  display: flex;
+  align-items: flex-end;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.compare__selector {
+  flex: 1;
+}
+
+.compare__selector label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.compare__select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #E8E0D8;
+  border-radius: 12px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.compare__select:focus {
+  outline: none;
+  border-color: #D4A373;
+}
+
+.compare__vs {
+  font-size: 20px;
+  font-weight: 800;
+  color: #D4A373;
+  padding-bottom: 10px;
+}
+
+/* Таблица сравнения */
+.compare__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.compare__table-row {
+  display: grid;
+  grid-template-columns: 140px 1fr 1fr;
+  border-bottom: 1px solid #F0EBE5;
+}
+
+.compare__table-row:last-child {
+  border-bottom: none;
+}
+
+.compare__table-label {
+  padding: 12px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #FFF8F0;
+}
+
+.compare__table-value {
+  padding: 12px 10px;
+  font-size: 15px;
+  color: #2D2D2D;
+}
+
+.compare__table-value--highlight {
+  background: #F0FFF0;
+  color: #4CAF50;
+  font-weight: 700;
+}
+
+.compare__table-value--muted {
+  color: #E74C3C;
+}
+
+.compare__table-header {
+  display: grid;
+  grid-template-columns: 140px 1fr 1fr;
+  border-bottom: 2px solid #D4A373;
+  padding-bottom: 10px;
+  margin-bottom: 5px;
+}
+
+.compare__table-header .compare__table-label {
+  background: none;
+}
+
+.compare__table-header .compare__table-value {
+  font-weight: 800;
+  font-size: 16px;
+  text-align: center;
+}
+
+.compare__empty {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 16px;
+}
+
+.compare__empty-icon {
+  font-size: 60px;
+  display: block;
+  margin-bottom: 15px;
 }
 
 /* ===== ПОДВАЛ ===== */

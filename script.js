@@ -115,7 +115,10 @@ function renderBreeds() {
           <p class="breed-card__desc">${breed.description}</p>
           <div class="breed-card__footer">
             <span class="breed-card__rating">${starsHTML(breed.rating)}</span>
-            <button class="breed-card__fav ${isFav ? 'active' : ''}" data-id="${breed.id}" title="В избранное">${isFav ? '❤️' : '🤍'}</button>
+            <div class="breed-card__actions">
+              <button class="breed-card__compare" data-id="${breed.id}" title="Сравнить">🆚</button>
+              <button class="breed-card__fav ${isFav ? 'active' : ''}" data-id="${breed.id}" title="В избранное">${isFav ? '❤️' : '🤍'}</button>
+            </div>
           </div>
         </div>
       </div>`;
@@ -134,6 +137,12 @@ breedList.addEventListener("click", (e) => {
   // Клик по кнопке избранного
   if (e.target.closest(".breed-card__fav")) {
     toggleFavorite(id);
+    return;
+  }
+
+  // Клик по кнопке сравнения
+  if (e.target.closest(".breed-card__compare")) {
+    addToCompare(id);
     return;
   }
 
@@ -393,6 +402,145 @@ function showTestResult() {
     goToStep(0);
   });
 }
+
+// --- Сравнение пород ---
+const compareModal = document.getElementById("compareModal");
+const compareOverlay = document.getElementById("compareOverlay");
+const compareClose = document.getElementById("compareClose");
+const compareSelect1 = document.getElementById("compareSelect1");
+const compareSelect2 = document.getElementById("compareSelect2");
+const compareTable = document.getElementById("compareTable");
+let compareList = [];
+
+// Заполняем селекты
+function populateCompareSelects() {
+  const opts = breeds.map(b => `<option value="${b.id}">${b.name}</option>`).join("");
+  compareSelect1.innerHTML = `<option value="">— Выберите —</option>${opts}`;
+  compareSelect2.innerHTML = `<option value="">— Выберите —</option>${opts}`;
+}
+
+// Добавить в сравнение
+function addToCompare(id) {
+  if (compareList.includes(id)) {
+    alert("Эта порода уже в сравнении!");
+    return;
+  }
+  if (compareList.length >= 2) {
+    alert("Можно сравнивать только 2 породы одновременно. Закрой сравнение и попробуй снова.");
+    return;
+  }
+  compareList.push(id);
+  if (compareList.length === 1) {
+    compareSelect1.value = id;
+  } else {
+    compareSelect2.value = id;
+  }
+  updateCompareTable();
+  if (!compareModal.classList.contains("active")) {
+    compareModal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+}
+
+// Обновить таблицу сравнения
+function updateCompareTable() {
+  const id1 = parseInt(compareSelect1.value);
+  const id2 = parseInt(compareSelect2.value);
+  const b1 = breeds.find(b => b.id === id1);
+  const b2 = breeds.find(b => b.id === id2);
+
+  if (!b1 || !b2) {
+    compareTable.innerHTML = `
+      <div class="compare__empty">
+        <span class="compare__empty-icon">🆚</span>
+        Выбери две породы для сравнения
+      </div>`;
+    return;
+  }
+
+  const rows = [
+    { label: "Размер", v1: getSizeLabel(b1.size), v2: getSizeLabel(b2.size) },
+    { label: "Вес", v1: b1.weight, v2: b2.weight },
+    { label: "Рост", v1: b1.height, v2: b2.height },
+    { label: "Активность", v1: getActivityLabel(b1.activity), v2: getActivityLabel(b2.activity) },
+    { label: "Шерсть", v1: getCoatLabel(b1.coat), v2: getCoatLabel(b2.coat) },
+    { label: "Гипоаллергенная", v1: b1.hypoallergenic ? "✅ Да" : "❌ Нет", v2: b2.hypoallergenic ? "✅ Да" : "❌ Нет" },
+    { label: "Для квартиры", v1: b1.goodForApartment ? "✅ Да" : "❌ Нет", v2: b2.goodForApartment ? "✅ Да" : "❌ Нет" },
+    { label: "С детьми", v1: b1.goodWithKids ? "✅ Да" : "❌ Нет", v2: b2.goodWithKids ? "✅ Да" : "❌ Нет" },
+    { label: "Продолж. жизни", v1: b1.lifeExpectancy, v2: b2.lifeExpectancy },
+    { label: "Рейтинг", v1: `${starsHTML(b1.rating)} (${b1.rating})`, v2: `${starsHTML(b2.rating)} (${b2.rating})` },
+  ];
+
+  compareTable.innerHTML = `
+    <div class="compare__table-header">
+      <div class="compare__table-label">Характеристика</div>
+      <div class="compare__table-value">${b1.name}</div>
+      <div class="compare__table-value">${b2.name}</div>
+    </div>
+    ${rows.map(r => {
+      // Подсвечиваем, какая порода лучше
+      let cls1 = "", cls2 = "";
+      if (r.label === "Рейтинг") {
+        if (b1.rating > b2.rating) cls1 = "compare__table-value--highlight";
+        else if (b2.rating > b1.rating) cls2 = "compare__table-value--highlight";
+      }
+      if (r.label === "Гипоаллергенная" || r.label === "Для квартиры" || r.label === "С детьми") {
+        if (b1.hypoallergenic && !b2.hypoallergenic) cls1 = "compare__table-value--highlight";
+        if (b2.hypoallergenic && !b1.hypoallergenic) cls2 = "compare__table-value--highlight";
+        if (b1.goodForApartment && !b2.goodForApartment) cls1 = "compare__table-value--highlight";
+        if (b2.goodForApartment && !b1.goodForApartment) cls2 = "compare__table-value--highlight";
+        if (b1.goodWithKids && !b2.goodWithKids) cls1 = "compare__table-value--highlight";
+        if (b2.goodWithKids && !b1.goodWithKids) cls2 = "compare__table-value--highlight";
+      }
+      return `
+        <div class="compare__table-row">
+          <div class="compare__table-label">${r.label}</div>
+          <div class="compare__table-value ${cls1}">${r.v1}</div>
+          <div class="compare__table-value ${cls2}">${r.v2}</div>
+        </div>`;
+    }).join("")}
+  `;
+}
+
+// События
+compareSelect1.addEventListener("change", () => {
+  const val = parseInt(compareSelect1.value);
+  if (val) {
+    if (!compareList.includes(val)) compareList = [val];
+    if (compareList.length === 2 && compareList[1] === val) compareList.pop();
+  }
+  updateCompareTable();
+});
+
+compareSelect2.addEventListener("change", () => {
+  const val = parseInt(compareSelect2.value);
+  if (val) {
+    if (compareList.length < 2) compareList.push(val);
+    else compareList[1] = val;
+  }
+  updateCompareTable();
+});
+
+function openCompare() {
+  populateCompareSelects();
+  compareList = [];
+  compareSelect1.value = "";
+  compareSelect2.value = "";
+  updateCompareTable();
+  compareModal.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function closeCompare() {
+  compareModal.classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+compareClose.addEventListener("click", closeCompare);
+compareOverlay.addEventListener("click", closeCompare);
+
+// Кнопка сравнения в шапке
+document.getElementById("compareBtn").addEventListener("click", openCompare);
 
 // --- Инициализация ---
 saveFavorites();
