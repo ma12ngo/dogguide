@@ -902,38 +902,102 @@ img {
 /* ===== АДАПТИВНОСТЬ ===== */
 @media screen and (max-width: 768px) {
   .header__inner {
-    flex-direction: column;
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 15px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .header__actions {
+    gap: 6px;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .search-wrapper {
+    flex: 1;
+    min-width: 0;
   }
 
   .search-input {
-    width: 180px;
+    width: 100%;
+    font-size: 13px;
+    padding: 8px 12px 8px 35px;
   }
 
   .search-input:focus {
-    width: 220px;
+    width: 100%;
+  }
+
+  .btn--icon {
+    font-size: 16px;
+    padding: 6px 10px;
   }
 
   .hero__title {
-    font-size: 32px;
+    font-size: 28px;
   }
 
   .hero__subtitle {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .hero__inner .btn {
     display: block;
     width: 100%;
-    margin: 10px 0;
+    margin: 8px 0;
+  }
+
+  .hero {
+    padding: 50px 0;
   }
 
   .filters__row {
     flex-direction: column;
+    gap: 12px;
+  }
+
+  .filter-group {
+    min-width: 100%;
+  }
+
+  .filter-btns {
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-size: 12px;
+    padding: 6px 12px;
   }
 
   .breed-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .breed-card__image {
+    height: 200px;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+
+  .modal__content {
+    padding: 20px;
+    max-width: 95%;
+    max-height: 90vh;
+  }
+
+  .modal__content--compare {
+    max-width: 95%;
+  }
+
+  .breed-detail__image {
+    height: 220px;
   }
 
   .breed-detail__info {
@@ -943,22 +1007,156 @@ img {
   .breed-detail__pros-cons {
     grid-template-columns: 1fr;
   }
+
+  .compare__selectors {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .compare__vs {
+    text-align: center;
+    padding-bottom: 0;
+  }
+
+  .compare__table-row {
+    grid-template-columns: 100px 1fr 1fr;
+  }
+
+  .compare__table-label {
+    font-size: 11px;
+    padding: 8px 6px;
+  }
+
+  .compare__table-value {
+    font-size: 13px;
+    padding: 8px 6px;
+  }
+
+  .test-hero__icon {
+    font-size: 60px;
+  }
+
+  .test-hero__title {
+    font-size: 24px;
+  }
+
+  .test-question__title {
+    font-size: 18px;
+  }
+
+  .test-option__content {
+    padding: 12px 14px;
+  }
+
+  .test-option__desc {
+    display: none;
+  }
+
+  .test-result__card img {
+    width: 55px;
+    height: 55px;
+  }
 }
 
 @media screen and (max-width: 480px) {
   .hero {
-    padding: 50px 0;
+    padding: 35px 0;
   }
 
   .hero__title {
-    font-size: 26px;
+    font-size: 22px;
   }
 
   .section-title {
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .breed-card__image {
     height: 180px;
+  }
+
+  .breed-card__body {
+    padding: 12px;
+  }
+
+  .breed-card__title {
+    font-size: 17px;
+  }
+
+  .breed-card__desc {
+    font-size: 13px;
+  }
+
+  .breed-detail__title {
+    font-size: 22px;
+  }
+
+  .breed-detail__image {
+    height: 180px;
+  }
+
+  .compare__table-row {
+    grid-template-columns: 80px 1fr 1fr;
+  }
+
+  .compare__table-label {
+    font-size: 10px;
+    padding: 6px 4px;
+  }
+
+  .compare__table-value {
+    font-size: 12px;
+    padding: 6px 4px;
+  }
+
+  .modal__content {
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .test-hero__icon {
+    font-size: 50px;
+  }
+
+  .test-hero__title {
+    font-size: 20px;
+  }
+
+  .test-question__title {
+    font-size: 16px;
+  }
+
+  .test-option__icon {
+    font-size: 22px;
+  }
+
+  .test-option__label {
+    font-size: 14px;
+  }
+
+  .test-result__title {
+    font-size: 20px;
+  }
+
+  .test-result__card {
+    padding: 10px;
+  }
+
+  .test-result__card img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .test-result__card-info h4 {
+    font-size: 14px;
+  }
+
+  .test-result__card-info p {
+    font-size: 12px;
+  }
+
+  .footer {
+    padding: 20px 0;
+    font-size: 12px;
   }
 }
