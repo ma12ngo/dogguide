@@ -606,8 +606,25 @@ function updateFullness() {
 updateFullness();
 
 donateBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+
   // Копируем номер карты в буфер
   navigator.clipboard.writeText(CARD_NUMBER).catch(() => {});
+
+  // Пытаемся открыть приложение Сбера (deep link)
+  const sberDeepLink = "sberbank://transfer/card?cardNumber=2202208356393273";
+  const sberFallback = "https://www.sberbank.ru/ru/person/payments/transfer/card";
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    // На телефоне — пытаемся открыть приложение
+    window.location.href = sberDeepLink;
+    // Если приложение не открылось за 1.5 сек — открываем сайт
+    setTimeout(() => { window.open(sberFallback, "_blank"); }, 1500);
+  } else {
+    // На ПК — просто открываем сайт
+    window.open(sberFallback, "_blank");
+  }
 
   // Анимация: собачка прыгает
   donateDog.classList.remove("jumping", "wagging");
