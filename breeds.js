@@ -3,7 +3,7 @@ const breeds = [
   {
     id: 1,
     name: "Лабрадор-ретривер",
-    image: "https://images.unsplash.com/photo-1591769225440-811ad7d6eab3?w=400&h=300&fit=crop",
+    image: "assets/images/labrador.jpg",
     size: "large",
     activity: "high",
     coat: "short",
@@ -33,7 +33,7 @@ const breeds = [
   {
     id: 2,
     name: "Сибирский хаски",
-    image: "https://images.unsplash.com/photo-1605568428661-a2dae482c0c4?w=400&h=300&fit=crop",
+    image: "assets/images/husky.jpg",
     size: "medium",
     activity: "high",
     coat: "long",
@@ -63,7 +63,7 @@ const breeds = [
   {
     id: 3,
     name: "Французский бульдог",
-    image: "https://images.unsplash.com/photo-1583512603805-3cc6b41f3edb?w=400&h=300&fit=crop",
+    image: "assets/images/bulldog.jpg",
     size: "small",
     activity: "low",
     coat: "short",
@@ -93,7 +93,7 @@ const breeds = [
   {
     id: 4,
     name: "Пудель",
-    image: "https://images.unsplash.com/photo-1598133894008-61f7f3b6e5c5?w=400&h=300&fit=crop",
+    image: "assets/images/poodle.jpg",
     size: "medium",
     activity: "medium",
     coat: "long",
@@ -123,7 +123,7 @@ const breeds = [
   {
     id: 5,
     name: "Мопс",
-    image: "https://images.unsplash.com/photo-1517849845537-4d257902454a?w=400&h=300&fit=crop",
+    image: "assets/images/pug.jpg",
     size: "small",
     activity: "low",
     coat: "short",
