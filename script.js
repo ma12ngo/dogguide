@@ -354,6 +354,7 @@ function showTestResult() {
   goToStep("Result");
 
   const content = document.getElementById("testResultContent");
+  const restartBtn = document.getElementById("testRestart");
   content.innerHTML = `
     <h3 class="test-result__title">🎉 Твои идеальные породы!</h3>
     <p class="test-result__subtitle">Мы подобрали ${display.length} пород${display.length > 1 ? "ы" : "у"}, которые тебе подходят</p>
@@ -368,8 +369,8 @@ function showTestResult() {
         </div>
       `).join("")}
     </div>
-    <button class="btn btn--outline test-result__restart" id="testRestart">🔄 Пройти заново</button>
   `;
+  restartBtn.style.display = "";
 
   // Клик по карточке результата — открываем модалку породы
   content.querySelectorAll(".test-result__card").forEach(card => {
@@ -384,10 +385,11 @@ function showTestResult() {
   });
 
   // Кнопка "Пройти заново"
-  document.getElementById("testRestart").addEventListener("click", () => {
+  restartBtn.addEventListener("click", () => {
     testAnswers = {};
     document.querySelectorAll(".test-option input").forEach(i => i.checked = false);
     document.querySelectorAll(".test-next").forEach(b => b.disabled = true);
+    restartBtn.style.display = "none";
     goToStep(0);
   });
 }
