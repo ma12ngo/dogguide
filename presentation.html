@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DogGuide — Защита проекта</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #1A1A2E;
+      color: #E8E0D8;
+      overflow: hidden;
+      height: 100vh;
+    }
+    .slide {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      padding: 60px 80px;
+      flex-direction: column;
+      justify-content: center;
+      animation: fadeIn 0.5s ease;
+    }
+    .slide.active { display: flex; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .slide__number {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #D4A373;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 56px;
+      color: #D4A373;
+      margin-bottom: 15px;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      color: #D4A373;
+      margin-bottom: 25px;
+    }
+    h3 {
+      font-size: 24px;
+      color: #D4A373;
+      margin-bottom: 15px;
+    }
+    p, li {
+      font-size: 20px;
+      line-height: 1.7;
+      color: #B0A8A0;
+    }
+    ul { list-style: none; padding: 0; }
+    li { padding: 8px 0; padding-left: 30px; position: relative; }
+    li::before {
+      content: "🐾";
+      position: absolute;
+      left: 0;
+      font-size: 16px;
+    }
+    .highlight { color: #D4A373; font-weight: 700; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    .card {
+      background: #25253E;
+      border-radius: 15px;
+      padding: 25px;
+      border: 1px solid #3A3A5A;
+    }
+    .card h3 { font-size: 20px; margin-bottom: 10px; }
+    .card p { font-size: 16px; }
+    .tag {
+      display: inline-block;
+      background: #2D2D4A;
+      color: #D4A373;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 3px;
+    }
+    .nav {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      z-index: 100;
+    }
+    .nav button {
+      background: #D4A373;
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .nav button:hover { background: #C08D5E; transform: translateY(-2px); }
+    .nav button:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+    .nav__dots {
+      display: flex;
+      gap: 8px;
+    }
+    .nav__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #3A3A5A;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .nav__dot.active { background: #D4A373; transform: scale(1.3); }
+    .slide__subtitle {
+      font-size: 18px;
+      color: #888;
+      margin-bottom: 30px;
+    }
+    .stats {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .stat {
+      background: #25253E;
+      border-radius: 15px;
+      padding: 20px 30px;
+      text-align: center;
+      flex: 1;
+      border: 1px solid #3A3A5A;
+    }
+    .stat__num {
+      font-size: 36px;
+      font-weight: 800;
+      color: #D4A373;
+    }
+    .stat__label {
+      font-size: 14px;
+      color: #888;
+      margin-top: 5px;
+    }
+    .tech-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .tech-item {
+      background: #25253E;
+      border: 1px solid #3A3A5A;
+      border-radius: 12px;
+      padding: 12px 20px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+    .tech-item__icon { font-size: 32px; margin-bottom: 5px; }
+    .tech-item__name { font-size: 14px; color: #B0A8A0; }
+    .tech-item__level { font-size: 12px; color: #D4A373; margin-top: 3px; }
+    .screenshot-placeholder {
+      background: #25253E;
+      border: 2px dashed #3A3A5A;
+      border-radius: 15px;
+      padding: 40px;
+      text-align: center;
+      color: #888;
+      font-size: 16px;
+    }
+    .screenshot-placeholder .big { font-size: 60px; display: block; margin-bottom: 10px; }
+    @media (max-width: 768px) {
+      .slide { padding: 30px 20px; }
+      h1 { font-size: 32px; }
+      h2 { font-size: 28px; }
+      p, li { font-size: 16px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .stats { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- СЛАЙД 1: Титульный -->
+  <div class="slide active" data-slide="0">
+    <div class="slide__number">1 / 10</div>
+    <div style="text-align:center;">
+      <div style="font-size:100px;margin-bottom:20px;">🐕</div>
+      <h1>DogGuide</h1>
+      <p style="font-size:24px;color:#D4A373;margin-bottom:10px;">Веб-сайт для подбора породы собаки</p>
+      <p style="font-size:18px;color:#888;">Индивидуальный проект по информатике</p>
+      <div style="margin-top:40px;">
+        <p><strong>Автор:</strong> Долганова Мария Анатольевна</p>
+        <p><strong>Класс:</strong> 10, информационно-технологический профиль</p>
+        <p><strong>Школа:</strong> МАОУ СОШ №88, г. Тюмень</p>
+        <p><strong>Руководитель:</strong> ____________________</p>
+        <p style="margin-top:20px;color:#888;">2026 г.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 2: Актуальность -->
+  <div class="slide" data-slide="1">
+    <div class="slide__number">2 / 10</div>
+    <h2>📋 Актуальность проекта</h2>
+    <p class="slide__subtitle">Почему это важно?</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3>❓ Проблема</h3>
+        <p>Информация о породах собак разбросана по разным сайтам и форумам. Нет единого удобного инструмента для сравнения и подбора породы под свой образ жизни.</p>
+      </div>
+      <div class="card">
+        <h3>📊 Статистика</h3>
+        <p>Около <strong>30% собак</strong> попадают в приюты из-за неверного выбора породы. Наш сайт помогает сделать осознанный выбор.</p>
+      </div>
+      <div class="card">
+        <h3>🎯 Целевая аудитория</h3>
+        <p>Подростки и семьи, которые планируют завести собаку и хотят выбрать подходящую породу.</p>
+      </div>
+      <div class="card">
+        <h3>💡 Решение</h3>
+        <p>Интерактивный сайт с фильтрами, тестом-подбором и сравнением пород — всё в одном месте.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 3: Цель и задачи -->
+  <div class="slide" data-slide="2">
+    <div class="slide__number">3 / 10</div>
+    <h2>🎯 Цель и задачи</h2>
+    <p class="slide__subtitle">Что нужно было сделать?</p>
+    <div class="card" style="margin-bottom:20px;">
+      <h3>Цель</h3>
+      <p>Разработать интерактивный веб-сайт для подбора породы собаки с возможностью фильтрации, сравнения и персонализированных рекомендаций.</p>
+    </div>
+    <h3 style="margin-top:20px;">Задачи</h3>
+    <div class="grid-2">
+      <div>
+        <ul>
+          <li>Собрать и структурировать данные о 15 породах</li>
+          <li>Спроектировать пользовательский интерфейс</li>
+          <li>Разработать адаптивную вёрстку</li>
+        </ul>
+      </div>
+      <div>
+        <ul>
+          <li>Реализовать фильтрацию, поиск и сравнение</li>
+          <li>Создать тест-подбор по 5 вопросам</li>
+          <li>Разместить сайт на GitHub Pages</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 4: Технологии -->
+  <div class="slide" data-slide="3">
+    <div class="slide__number">4 / 10</div>
+    <h2>🛠 Используемые технологии</h2>
+    <p class="slide__subtitle">Инструменты и языки</p>
+    <div class="tech-list">
+      <div class="tech-item">
+        <div class="tech-item__icon">🌐</div>
+        <div class="tech-item__name">HTML5</div>
+        <div class="tech-item__level">Структура страниц</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item__icon">🎨</div>
+        <div class="tech-item__name">CSS3</div>
+        <div class="tech-item__level">Стили + анимации</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item__icon">⚡</div>
+        <div class="tech-item__name">JavaScript</div>
+        <div class="tech-item__level">Логика + фильтры</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item__icon">📦</div>
+        <div class="tech-item__name">Git + GitHub</div>
+        <div class="tech-item__level">Версионирование</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item__icon">🚀</div>
+        <div class="tech-item__name">GitHub Pages</div>
+        <div class="tech-item__level">Хостинг</div>
+      </div>
+    </div>
+    <div style="margin-top:30px;">
+      <h3>Структура проекта</h3>
+      <div class="card">
+        <p style="font-family:monospace;font-size:14px;line-height:1.8;">
+          dogguide/<br>
+          ├── index.html &nbsp;← Главная страница<br>
+          ├── style.css &nbsp;&nbsp;&nbsp;← Все стили<br>
+          ├── script.js &nbsp;&nbsp;&nbsp;← Логика<br>
+          ├── breeds.js &nbsp;&nbsp;← Данные о 15 породах<br>
+          └── assets/images/ ← Фото собак
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 5: Функционал -->
+  <div class="slide" data-slide="4">
+    <div class="slide__number">5 / 10</div>
+    <h2>⚙️ Функционал сайта</h2>
+    <p class="slide__subtitle">Что умеет DogGuide</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3>🔍 Фильтры и поиск</h3>
+        <p>Фильтрация по размеру, активности и типу шерсти. Поиск по названию и описанию породы.</p>
+      </div>
+      <div class="card">
+        <h3>❤️ Избранное</h3>
+        <p>Сохранение понравившихся пород в браузере (localStorage).</p>
+      </div>
+      <div class="card">
+        <h3>🎯 Тест-подбор</h3>
+        <p>5 вопросов → персональная рекомендация с топ-3 породами и медальками.</p>
+      </div>
+      <div class="card">
+        <h3>🆚 Сравнение</h3>
+        <p>Выбор двух пород и сравнение по 10 характеристикам с подсветкой лучшей.</p>
+      </div>
+      <div class="card">
+        <h3>📖 Детальная информация</h3>
+        <p>Клик по карточке → модальное окно с описанием, плюсами, минусами и характеристиками.</p>
+      </div>
+      <div class="card">
+        <h3>🌙 Тёмная тема</h3>
+        <p>Переключение темы одним кликом. Выбор сохраняется в браузере.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 6: Скриншоты -->
+  <div class="slide" data-slide="5">
+    <div class="slide__number">6 / 10</div>
+    <h2>📸 Внешний вид сайта</h2>
+    <p class="slide__subtitle">Скриншоты ключевых страниц</p>
+    <div class="grid-2">
+      <div class="screenshot-placeholder">
+        <span class="big">🐕</span>
+        Главная страница с каталогом из 15 пород
+      </div>
+      <div class="screenshot-placeholder">
+        <span class="big">🎯</span>
+        Тест-подбор: 5 вопросов → рекомендация
+      </div>
+      <div class="screenshot-placeholder">
+        <span class="big">🆚</span>
+        Сравнение двух пород по характеристикам
+      </div>
+      <div class="screenshot-placeholder">
+        <span class="big">🌙</span>
+        Тёмная тема с переключателем в шапке
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:20px;color:#888;">
+      🔗 Сайт доступен: <a href="https://ma12ngo.github.io/dogguide/" target="_blank" style="color:#D4A373;">ma12ngo.github.io/dogguide</a>
+    </p>
+  </div>
+
+  <!-- СЛАЙД 7: Результаты -->
+  <div class="slide" data-slide="6">
+    <div class="slide__number">7 / 10</div>
+    <h2>📊 Результаты работы</h2>
+    <p class="slide__subtitle">Чего удалось достичь</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat__num">15</div>
+        <div class="stat__label">Пород собак</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">5</div>
+        <div class="stat__label">Вопросов в тесте</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">10</div>
+        <div class="stat__label">Характеристик для сравнения</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">3</div>
+        <div class="stat__label">Файла в проекте</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;">
+      <div class="card">
+        <h3>✅ Все реализованные функции</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+          <span class="tag">✅ Каталог пород</span>
+          <span class="tag">✅ Фильтры</span>
+          <span class="tag">✅ Поиск</span>
+          <span class="tag">✅ Избранное</span>
+          <span class="tag">✅ Тест-подбор</span>
+          <span class="tag">✅ Сравнение</span>
+          <span class="tag">✅ Тёмная тема</span>
+          <span class="tag">✅ Адаптивность</span>
+          <span class="tag">✅ GitHub Pages</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 8: Этапы -->
+  <div class="slide" data-slide="7">
+    <div class="slide__number">8 / 10</div>
+    <h2>📅 Этапы реализации</h2>
+    <p class="slide__subtitle">Как шла работа над проектом</p>
+    <div style="position:relative;padding-left:30px;">
+      <div style="position:absolute;left:10px;top:0;bottom:0;width:2px;background:#3A3A5A;"></div>
+      <div style="position:relative;padding-bottom:20px;">
+        <div style="position:absolute;left:-24px;top:4px;width:12px;height:12px;border-radius:50%;background:#D4A373;"></div>
+        <h3 style="font-size:18px;">Июль 2026 — Подготовка</h3>
+        <p style="font-size:16px;">Сбор информации о породах, создание макета, выбор технологий</p>
+      </div>
+      <div style="position:relative;padding-bottom:20px;">
+        <div style="position:absolute;left:-24px;top:4px;width:12px;height:12px;border-radius:50%;background:#D4A373;"></div>
+        <h3 style="font-size:18px;">Июль 2026 — Вёрстка</h3>
+        <p style="font-size:16px;">Создание HTML-структуры, CSS-стилей, адаптивность</p>
+      </div>
+      <div style="position:relative;padding-bottom:20px;">
+        <div style="position:absolute;left:-24px;top:4px;width:12px;height:12px;border-radius:50%;background:#D4A373;"></div>
+        <h3 style="font-size:18px;">Июль 2026 — Программирование</h3>
+        <p style="font-size:16px;">Фильтры, поиск, избранное, тест-подбор, сравнение, тёмная тема</p>
+      </div>
+      <div style="position:relative;padding-bottom:20px;">
+        <div style="position:absolute;left:-24px;top:4px;width:12px;height:12px;border-radius:50%;background:#D4A373;"></div>
+        <h3 style="font-size:18px;">Июль 2026 — Публикация</h3>
+        <p style="font-size:16px;">Git + GitHub, GitHub Pages, финальное тестирование</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 9: Сложности -->
+  <div class="slide" data-slide="8">
+    <div class="slide__number">9 / 10</div>
+    <h2>🧗‍♀️ Сложности и их решения</h2>
+    <p class="slide__subtitle">С чем пришлось столкнуться</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3>❌ Фото не грузились</h3>
+        <p>Unsplash заблокирован в России. Решение: использовали Wikimedia Commons и dog.ceo API, скачали фото локально.</p>
+      </div>
+      <div class="card">
+        <h3>❌ Селекты сравнения пустые</h3>
+        <p>При клике на 🆚 с карточки селекты не заполнялись. Решение: добавили вызов populateCompareSelects() при загрузке.</p>
+      </div>
+      <div class="card">
+        <h3>❌ API dog.ceo перегружен</h3>
+        <p>Иногда не отвечал. Решение: использовали несколько источников (Wikimedia, dog.ceo) и локальное хранение.</p>
+      </div>
+      <div class="card">
+        <h3>❌ Жёсткие цвета в CSS</h3>
+        <p>Было много дублирования цветов. Решение: перевели всё на CSS-переменные для лёгкой смены темы.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 10: Заключение -->
+  <div class="slide" data-slide="9">
+    <div class="slide__number">10 / 10</div>
+    <div style="text-align:center;">
+      <div style="font-size:80px;margin-bottom:20px;">🐕</div>
+      <h1>Спасибо за внимание!</h1>
+      <p style="font-size:22px;color:#D4A373;margin-bottom:30px;">Вопросы?</p>
+      <div style="display:flex;justify-content:center;gap:30px;flex-wrap:wrap;">
+        <div class="card" style="text-align:center;min-width:200px;">
+          <p style="font-size:14px;color:#888;">Сайт проекта</p>
+          <p style="font-size:18px;color:#D4A373;">ma12ngo.github.io/dogguide</p>
+        </div>
+        <div class="card" style="text-align:center;min-width:200px;">
+          <p style="font-size:14px;color:#888;">GitHub</p>
+          <p style="font-size:18px;color:#D4A373;">github.com/ma12ngo/dogguide</p>
+        </div>
+      </div>
+      <p style="margin-top:30px;color:#888;">Долганова Мария, 10 класс, МАОУ СОШ №88, Тюмень</p>
+    </div>
+  </div>
+
+  <!-- Навигация -->
+  <div class="nav">
+    <button id="prevBtn" disabled>← Назад</button>
+    <div class="nav__dots" id="dots"></div>
+    <button id="nextBtn">Далее →</button>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.getElementById('dots');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let current = 0;
+
+    slides.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'nav__dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goTo(i));
+      dots.appendChild(dot);
+    });
+
+    function goTo(n) {
+      slides[current].classList.remove('active');
+      dots.children[current].classList.remove('active');
+      current = n;
+      slides[current].classList.add('active');
+      dots.children[current].classList.add('active');
+      prevBtn.disabled = current === 0;
+      nextBtn.textContent = current === slides.length - 1 ? '✨ В начало' : 'Далее →';
+    }
+
+    prevBtn.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
+    nextBtn.addEventListener('click', () => {
+      if (current === slides.length - 1) goTo(0);
+      else goTo(current + 1);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextBtn.click();
+      }
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevBtn.click();
+      }
+    });
+  </script>
+</body>
+</html>
