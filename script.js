@@ -605,20 +605,9 @@ function updateFullness() {
 // Восстанавливаем сытость при загрузке
 updateFullness();
 
-donateBtn.addEventListener("click", (e) => {
+donateBtn.addEventListener("click", () => {
   // Копируем номер карты в буфер
   navigator.clipboard.writeText(CARD_NUMBER).catch(() => {});
-
-  // Определяем устройство
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-  if (isMobile) {
-    // На телефоне — пытаемся открыть приложение Сбера
-    e.preventDefault();
-    window.location.href = "sberbank://transfer/card?cardNumber=2202208356393273";
-    setTimeout(() => { window.open("https://www.sberbank.ru/ru/person/payments/transfer/card", "_blank"); }, 1500);
-  }
-  // На ПК — ссылка работает как обычная (href уже стоит)
 
   // Анимация: собачка прыгает
   donateDog.classList.remove("jumping", "wagging");
