@@ -305,8 +305,31 @@
 
   <!-- ===== ПОДВАЛ ===== -->
   <footer class="footer">
-    <div class="container footer__inner">
-      <p>© 2026 DogGuide</p>
+    <div class="container">
+      <!-- Блок "Угости собачку" -->
+      <div class="donate-block">
+        <div class="donate-block__pet">
+          <span class="donate-block__dog" id="donateDog">🐕</span>
+          <div class="donate-block__bowl" id="donateBowl">
+            <span class="donate-block__bowl-empty">🍽️</span>
+            <span class="donate-block__bowl-food" id="bowlFood">🦴</span>
+          </div>
+        </div>
+        <div class="donate-block__info">
+          <h3 class="donate-block__title">Угости DogGuide 🍖</h3>
+          <p class="donate-block__desc">Проект живёт на энтузиазме и корме для собак. Поддержи разработку — угости пёсика!</p>
+          <div class="donate-block__meter">
+            <div class="donate-block__meter-bar" id="fullnessBar"></div>
+            <span class="donate-block__meter-text" id="fullnessText">Сытость: 0%</span>
+          </div>
+          <a href="#" class="btn btn--donate" id="donateBtn">🍖 Угостить</a>
+          <p class="donate-block__thanks" id="donateThanks" style="display:none;">Спасибо! 🐕✨</p>
+          <p class="donate-block__card" id="donateCard" style="display:none;">💳 Номер карты скопирован: 2202 2083 5639 3273</p>
+        </div>
+      </div>
+      <div class="footer__inner">
+        <p>© 2026 DogGuide</p>
+      </div>
     </div>
   </footer>
 

@@ -575,3 +575,81 @@ themeToggle.addEventListener("click", () => {
 populateCompareSelects();
 saveFavorites();
 renderBreeds();
+
+// --- Донат "Угости собачку" ---
+const donateBtn = document.getElementById("donateBtn");
+const fullnessBar = document.getElementById("fullnessBar");
+const fullnessText = document.getElementById("fullnessText");
+const donateDog = document.getElementById("donateDog");
+const bowlFood = document.getElementById("bowlFood");
+const donateThanks = document.getElementById("donateThanks");
+const donateCard = document.getElementById("donateCard");
+const CARD_NUMBER = "2202 2083 5639 3273";
+
+let fullness = parseInt(localStorage.getItem("dogguide_fullness")) || 0;
+let donateCount = parseInt(localStorage.getItem("dogguide_donate_count")) || 0;
+
+function updateFullness() {
+  fullnessBar.style.width = Math.min(fullness, 100) + "%";
+  fullnessText.textContent = `Сытость: ${Math.min(fullness, 100)}%`;
+  if (fullness >= 100) {
+    fullnessText.textContent = "🍖 Сытость: 100% — Пёсик счастлив!";
+    fullnessBar.style.background = "linear-gradient(90deg, #7CB342, #4CAF50)";
+  }
+  if (bowlFood) {
+    bowlFood.classList.toggle("visible", fullness > 0);
+  }
+  localStorage.setItem("dogguide_fullness", fullness);
+  localStorage.setItem("dogguide_donate_count", donateCount);
+}
+
+// Восстанавливаем сытость при загрузке
+updateFullness();
+
+donateBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  // Копируем номер карты в буфер
+  navigator.clipboard.writeText(CARD_NUMBER).catch(() => {});
+
+  // Анимация: собачка прыгает
+  donateDog.classList.remove("jumping", "wagging");
+  void donateDog.offsetWidth;
+  donateDog.classList.add("jumping");
+
+  // Увеличиваем сытость
+  fullness = Math.min(fullness + 15, 100);
+  donateCount++;
+  updateFullness();
+
+  // Показываем номер карты
+  donateCard.style.display = "block";
+  donateThanks.style.display = "block";
+  setTimeout(() => {
+    donateThanks.style.display = "none";
+    donateCard.style.display = "none";
+  }, 3000);
+
+  // Виляние хвостом после прыжка
+  setTimeout(() => {
+    donateDog.classList.remove("jumping");
+    donateDog.classList.add("wagging");
+    setTimeout(() => donateDog.classList.remove("wagging"), 1000);
+  }, 1000);
+
+  // Если сытость 100% — спецэффект
+  if (fullness >= 100) {
+    setTimeout(() => {
+      donateDog.textContent = "🐶";
+      setTimeout(() => { donateDog.textContent = "🐕"; }, 1500);
+    }, 500);
+  }
+});
+
+// Клик по собачке — тоже угощение (но без счётчика)
+donateDog.addEventListener("click", () => {
+  donateDog.classList.remove("wagging");
+  void donateDog.offsetWidth;
+  donateDog.classList.add("wagging");
+  setTimeout(() => donateDog.classList.remove("wagging"), 1000);
+});
