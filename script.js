@@ -429,6 +429,10 @@ function addToCompare(id) {
     alert("Можно сравнивать только 2 породы одновременно. Закрой сравнение и попробуй снова.");
     return;
   }
+  // Заполняем селекты, если ещё не заполнены
+  if (!compareSelect1.options.length || compareSelect1.options.length <= 1) {
+    populateCompareSelects();
+  }
   compareList.push(id);
   if (compareList.length === 1) {
     compareSelect1.value = id;
@@ -543,5 +547,6 @@ compareOverlay.addEventListener("click", closeCompare);
 document.getElementById("compareBtn").addEventListener("click", openCompare);
 
 // --- Инициализация ---
+populateCompareSelects();
 saveFavorites();
 renderBreeds();
