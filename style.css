@@ -5,11 +5,66 @@
   box-sizing: border-box;
 }
 
+/* ===== CSS-ПЕРЕМЕННЫЕ (СВЕТЛАЯ ТЕМА) ===== */
+:root {
+  --bg-body: #FFF8F0;
+  --bg-card: #fff;
+  --bg-header: #fff;
+  --bg-filters: #fff;
+  --bg-hero-start: #FFF8F0;
+  --bg-hero-end: #F5E6D3;
+  --bg-tag: #F5E6D3;
+  --bg-input: #FFF8F0;
+  --bg-modal: #fff;
+  --bg-info-item: #FFF8F0;
+  --bg-option: #fff;
+  --bg-option-hover: #FFF8F0;
+  --text-primary: #2D2D2D;
+  --text-secondary: #666;
+  --text-muted: #888;
+  --text-tag: #8B6F47;
+  --border-color: #E8E0D8;
+  --accent: #D4A373;
+  --accent-hover: #C08D5E;
+  --shadow: rgba(0,0,0,0.08);
+  --shadow-hover: rgba(0,0,0,0.15);
+  --footer-bg: #2D2D2D;
+  --footer-text: #aaa;
+}
+
+/* ===== ТЁМНАЯ ТЕМА ===== */
+.dark-theme {
+  --bg-body: #1A1A2E;
+  --bg-card: #25253E;
+  --bg-header: #1E1E36;
+  --bg-filters: #1E1E36;
+  --bg-hero-start: #1A1A2E;
+  --bg-hero-end: #25253E;
+  --bg-tag: #2D2D4A;
+  --bg-input: #25253E;
+  --bg-modal: #25253E;
+  --bg-info-item: #1E1E36;
+  --bg-option: #25253E;
+  --bg-option-hover: #1E1E36;
+  --text-primary: #E8E0D8;
+  --text-secondary: #B0A8A0;
+  --text-muted: #888;
+  --text-tag: #D4A373;
+  --border-color: #3A3A5A;
+  --accent: #D4A373;
+  --accent-hover: #C08D5E;
+  --shadow: rgba(0,0,0,0.3);
+  --shadow-hover: rgba(0,0,0,0.5);
+  --footer-bg: #0D0D1A;
+  --footer-text: #666;
+}
+
 body {
   font-family: 'Nunito', sans-serif;
-  background-color: #FFF8F0;
-  color: #2D2D2D;
+  background-color: var(--bg-body);
+  color: var(--text-primary);
   line-height: 1.6;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .container {
@@ -34,8 +89,8 @@ img {
 
 /* ===== ШАПКА ===== */
 .header {
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  background: var(--bg-header);
+  box-shadow: 0 2px 10px var(--shadow);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -52,7 +107,7 @@ img {
   font-family: 'Playfair Display', serif;
   font-size: 24px;
   font-weight: 700;
-  color: #D4A373;
+  color: var(--accent);
 }
 
 .header__actions {
@@ -67,18 +122,18 @@ img {
 
 .search-input {
   padding: 10px 15px 10px 40px;
-  border: 2px solid #E8E0D8;
+  border: 2px solid var(--border-color);
   border-radius: 25px;
   font-size: 14px;
   font-family: 'Nunito', sans-serif;
-  background: #FFF8F0;
+  background: var(--bg-input);
   width: 250px;
-  transition: border-color 0.3s, width 0.3s;
+  transition: border-color 0.3s, width 0.3s, background 0.3s;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #D4A373;
+  border-color: var(--accent);
   width: 300px;
 }
 
@@ -102,48 +157,47 @@ img {
 }
 
 .btn--icon {
-  background: none;
+  background: var(--bg-input);
   font-size: 18px;
   padding: 8px 12px;
   border-radius: 50%;
-  background: #FFF8F0;
-  border: 2px solid #E8E0D8;
+  border: 2px solid var(--border-color);
 }
 
 .btn--icon:hover {
-  background: #F5E6D3;
-  border-color: #D4A373;
+  background: var(--bg-tag);
+  border-color: var(--accent);
 }
 
 .btn--primary {
-  background: #D4A373;
+  background: var(--accent);
   color: #fff;
   font-size: 16px;
   padding: 14px 30px;
 }
 
 .btn--primary:hover {
-  background: #C08D5E;
+  background: var(--accent-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(212, 163, 115, 0.4);
 }
 
 .btn--outline {
   background: transparent;
-  color: #D4A373;
-  border: 2px solid #D4A373;
+  color: var(--accent);
+  border: 2px solid var(--accent);
   font-size: 16px;
   padding: 12px 28px;
 }
 
 .btn--outline:hover {
-  background: #D4A373;
+  background: var(--accent);
   color: #fff;
 }
 
 /* ===== HERO ===== */
 .hero {
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 100%);
+  background: linear-gradient(135deg, var(--bg-hero-start) 0%, var(--bg-hero-end) 100%);
   padding: 80px 0;
   text-align: center;
 }
@@ -151,16 +205,16 @@ img {
 .hero__title {
   font-size: 48px;
   margin-bottom: 20px;
-  color: #2D2D2D;
+  color: var(--text-primary);
 }
 
 .highlight {
-  color: #D4A373;
+  color: var(--accent);
 }
 
 .hero__subtitle {
   font-size: 18px;
-  color: #666;
+  color: var(--text-secondary);
   margin-bottom: 30px;
   max-width: 600px;
   margin-left: auto;
@@ -174,14 +228,14 @@ img {
 /* ===== ФИЛЬТРЫ ===== */
 .filters {
   padding: 40px 0;
-  background: #fff;
+  background: var(--bg-filters);
 }
 
 .section-title {
   font-size: 32px;
   text-align: center;
   margin-bottom: 30px;
-  color: #2D2D2D;
+  color: var(--text-primary);
 }
 
 .filters__row {
@@ -200,7 +254,7 @@ img {
   display: block;
   font-weight: 700;
   margin-bottom: 8px;
-  color: #555;
+  color: var(--text-secondary);
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -214,25 +268,25 @@ img {
 
 .filter-btn {
   padding: 8px 14px;
-  border: 2px solid #E8E0D8;
+  border: 2px solid var(--border-color);
   border-radius: 20px;
-  background: #fff;
+  background: var(--bg-card);
   font-family: 'Nunito', sans-serif;
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .filter-btn:hover {
-  border-color: #D4A373;
-  color: #D4A373;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .filter-btn.active {
-  background: #D4A373;
+  background: var(--accent);
   color: #fff;
-  border-color: #D4A373;
+  border-color: var(--accent);
 }
 
 /* ===== КАТАЛОГ ===== */
@@ -248,7 +302,7 @@ img {
 }
 
 .results-count {
-  color: #888;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
@@ -260,17 +314,17 @@ img {
 
 /* ===== КАРТОЧКА ПОРОДЫ ===== */
 .breed-card {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 3px 15px var(--shadow);
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
   cursor: pointer;
 }
 
 .breed-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 25px var(--shadow-hover);
 }
 
 .breed-card__image {
@@ -287,7 +341,7 @@ img {
   font-family: 'Playfair Display', serif;
   font-size: 20px;
   margin-bottom: 8px;
-  color: #2D2D2D;
+  color: var(--text-primary);
 }
 
 .breed-card__tags {
@@ -298,8 +352,8 @@ img {
 }
 
 .breed-card__tag {
-  background: #F5E6D3;
-  color: #8B6F47;
+  background: var(--bg-tag);
+  color: var(--text-tag);
   padding: 3px 10px;
   border-radius: 12px;
   font-size: 12px;
@@ -307,7 +361,7 @@ img {
 }
 
 .breed-card__desc {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 14px;
   margin-bottom: 12px;
   line-height: 1.5;
@@ -320,7 +374,7 @@ img {
 }
 
 .breed-card__rating {
-  color: #D4A373;
+  color: var(--accent);
   font-size: 14px;
 }
 
@@ -387,7 +441,7 @@ img {
 
 .modal__content {
   position: relative;
-  background: #fff;
+  background: var(--bg-modal);
   border-radius: 20px;
   max-width: 700px;
   width: 90%;
@@ -417,12 +471,12 @@ img {
   background: none;
   border: none;
   cursor: pointer;
-  color: #999;
+  color: var(--text-muted);
   transition: color 0.2s;
 }
 
 .modal__close:hover {
-  color: #333;
+  color: var(--text-primary);
 }
 
 /* Детали породы в модалке */
@@ -437,10 +491,11 @@ img {
 .breed-detail__title {
   font-size: 28px;
   margin-bottom: 5px;
+  color: var(--text-primary);
 }
 
 .breed-detail__rating {
-  color: #D4A373;
+  color: var(--accent);
   font-size: 18px;
   margin-bottom: 15px;
 }
@@ -453,14 +508,14 @@ img {
 }
 
 .breed-detail__info-item {
-  background: #FFF8F0;
+  background: var(--bg-info-item);
   padding: 10px 15px;
   border-radius: 10px;
 }
 
 .breed-detail__info-label {
   font-size: 12px;
-  color: #888;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -468,6 +523,7 @@ img {
 .breed-detail__info-value {
   font-weight: 700;
   font-size: 16px;
+  color: var(--text-primary);
   margin-top: 3px;
 }
 
@@ -478,11 +534,11 @@ img {
 .breed-detail__section h3 {
   font-size: 18px;
   margin-bottom: 8px;
-  color: #D4A373;
+  color: var(--accent);
 }
 
 .breed-detail__section p {
-  color: #555;
+  color: var(--text-secondary);
   font-size: 15px;
   line-height: 1.7;
 }
@@ -512,7 +568,7 @@ img {
 .breed-detail__cons li {
   padding: 4px 0;
   font-size: 14px;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 /* ===== ТЕСТ-ПОДБОР ===== */
@@ -529,7 +585,6 @@ img {
   display: block;
 }
 
-/* Приветствие */
 .test-hero {
   text-align: center;
   padding: 30px 0;
@@ -544,25 +599,24 @@ img {
 .test-hero__title {
   font-size: 28px;
   margin-bottom: 10px;
-  color: #2D2D2D;
+  color: var(--text-primary);
 }
 
 .test-hero__desc {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 16px;
   margin-bottom: 25px;
   line-height: 1.6;
 }
 
-/* Вопрос */
 .test-question {
   padding: 10px 0;
 }
 
 .test-question__number {
   display: inline-block;
-  background: #F5E6D3;
-  color: #8B6F47;
+  background: var(--bg-tag);
+  color: var(--text-tag);
   padding: 4px 14px;
   border-radius: 20px;
   font-size: 13px;
@@ -573,10 +627,9 @@ img {
 .test-question__title {
   font-size: 22px;
   margin-bottom: 20px;
-  color: #2D2D2D;
+  color: var(--text-primary);
 }
 
-/* Варианты ответов */
 .test-options {
   display: flex;
   flex-direction: column;
@@ -597,19 +650,19 @@ img {
   align-items: center;
   gap: 12px;
   padding: 14px 18px;
-  border: 2px solid #E8E0D8;
+  border: 2px solid var(--border-color);
   border-radius: 14px;
   transition: all 0.2s;
-  background: #fff;
+  background: var(--bg-option);
 }
 
 .test-option:hover .test-option__content {
-  border-color: #D4A373;
+  border-color: var(--accent);
 }
 
 .test-option input:checked + .test-option__content {
-  border-color: #D4A373;
-  background: #FFF8F0;
+  border-color: var(--accent);
+  background: var(--bg-option-hover);
   box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.2);
 }
 
@@ -621,16 +674,15 @@ img {
 .test-option__label {
   font-weight: 700;
   font-size: 16px;
-  color: #2D2D2D;
+  color: var(--text-primary);
 }
 
 .test-option__desc {
   font-size: 13px;
-  color: #888;
+  color: var(--text-muted);
   margin-left: auto;
 }
 
-/* Кнопка Далее */
 .test-next {
   display: block;
   width: 100%;
@@ -644,7 +696,6 @@ img {
   box-shadow: none !important;
 }
 
-/* Результат */
 .test-result {
   text-align: center;
   padding: 10px 0;
@@ -653,11 +704,11 @@ img {
 .test-result__title {
   font-size: 24px;
   margin-bottom: 5px;
-  color: #2D2D2D;
+  color: var(--text-primary);
 }
 
 .test-result__subtitle {
-  color: #888;
+  color: var(--text-muted);
   font-size: 15px;
   margin-bottom: 20px;
 }
@@ -674,7 +725,7 @@ img {
   align-items: center;
   gap: 15px;
   padding: 12px;
-  border: 2px solid #E8E0D8;
+  border: 2px solid var(--border-color);
   border-radius: 14px;
   text-align: left;
   cursor: pointer;
@@ -682,8 +733,8 @@ img {
 }
 
 .test-result__card:hover {
-  border-color: #D4A373;
-  background: #FFF8F0;
+  border-color: var(--accent);
+  background: var(--bg-option-hover);
 }
 
 .test-result__card img {
@@ -696,12 +747,13 @@ img {
 
 .test-result__card-info h4 {
   font-size: 16px;
+  color: var(--text-primary);
   margin-bottom: 3px;
 }
 
 .test-result__card-info p {
   font-size: 13px;
-  color: #888;
+  color: var(--text-muted);
 }
 
 .test-result__restart {
@@ -717,6 +769,7 @@ img {
   text-align: center;
   font-size: 24px;
   margin-bottom: 20px;
+  color: var(--text-primary);
 }
 
 .compare__selectors {
@@ -734,7 +787,7 @@ img {
   display: block;
   font-size: 13px;
   font-weight: 700;
-  color: #888;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 6px;
@@ -743,28 +796,28 @@ img {
 .compare__select {
   width: 100%;
   padding: 10px 14px;
-  border: 2px solid #E8E0D8;
+  border: 2px solid var(--border-color);
   border-radius: 12px;
   font-family: 'Nunito', sans-serif;
   font-size: 15px;
-  background: #fff;
+  background: var(--bg-card);
+  color: var(--text-primary);
   cursor: pointer;
   transition: border-color 0.2s;
 }
 
 .compare__select:focus {
   outline: none;
-  border-color: #D4A373;
+  border-color: var(--accent);
 }
 
 .compare__vs {
   font-size: 20px;
   font-weight: 800;
-  color: #D4A373;
+  color: var(--accent);
   padding-bottom: 10px;
 }
 
-/* Таблица сравнения */
 .compare__table {
   width: 100%;
   border-collapse: collapse;
@@ -773,7 +826,7 @@ img {
 .compare__table-row {
   display: grid;
   grid-template-columns: 140px 1fr 1fr;
-  border-bottom: 1px solid #F0EBE5;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .compare__table-row:last-child {
@@ -784,16 +837,16 @@ img {
   padding: 12px 10px;
   font-size: 13px;
   font-weight: 700;
-  color: #888;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background: #FFF8F0;
+  background: var(--bg-info-item);
 }
 
 .compare__table-value {
   padding: 12px 10px;
   font-size: 15px;
-  color: #2D2D2D;
+  color: var(--text-primary);
 }
 
 .compare__table-value--highlight {
@@ -809,7 +862,7 @@ img {
 .compare__table-header {
   display: grid;
   grid-template-columns: 140px 1fr 1fr;
-  border-bottom: 2px solid #D4A373;
+  border-bottom: 2px solid var(--accent);
   padding-bottom: 10px;
   margin-bottom: 5px;
 }
@@ -827,7 +880,7 @@ img {
 .compare__empty {
   text-align: center;
   padding: 40px;
-  color: #999;
+  color: var(--text-muted);
   font-size: 16px;
 }
 
@@ -839,8 +892,8 @@ img {
 
 /* ===== ПОДВАЛ ===== */
 .footer {
-  background: #2D2D2D;
-  color: #aaa;
+  background: var(--footer-bg);
+  color: var(--footer-text);
   padding: 30px 0;
   text-align: center;
   font-size: 14px;

@@ -546,6 +546,31 @@ compareOverlay.addEventListener("click", closeCompare);
 // Кнопка сравнения в шапке
 document.getElementById("compareBtn").addEventListener("click", openCompare);
 
+// --- Тёмная тема ---
+const themeToggle = document.getElementById("themeToggle");
+
+function setTheme(dark) {
+  if (dark) {
+    document.body.classList.add("dark-theme");
+    themeToggle.textContent = "☀️";
+    themeToggle.title = "Светлая тема";
+  } else {
+    document.body.classList.remove("dark-theme");
+    themeToggle.textContent = "🌙";
+    themeToggle.title = "Тёмная тема";
+  }
+  localStorage.setItem("dogguide_theme", dark ? "dark" : "light");
+}
+
+// Применяем сохранённую тему
+const savedTheme = localStorage.getItem("dogguide_theme");
+if (savedTheme === "dark") setTheme(true);
+
+themeToggle.addEventListener("click", () => {
+  const isDark = document.body.classList.contains("dark-theme");
+  setTheme(!isDark);
+});
+
 // --- Инициализация ---
 populateCompareSelects();
 saveFavorites();
