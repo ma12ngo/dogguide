@@ -1,0 +1,4 @@
+# Скриншоты
+*.png
+*.jpg
+!assets/images/*.jpg
