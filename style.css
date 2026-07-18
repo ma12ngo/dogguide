@@ -1,0 +1,570 @@
+/* ===== ОБЩИЕ СТИЛИ ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background-color: #FFF8F0;
+  color: #2D2D2D;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===== ШАПКА ===== */
+.header {
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #D4A373;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.search-wrapper {
+  position: relative;
+}
+
+.search-input {
+  padding: 10px 15px 10px 40px;
+  border: 2px solid #E8E0D8;
+  border-radius: 25px;
+  font-size: 14px;
+  font-family: 'Nunito', sans-serif;
+  background: #FFF8F0;
+  width: 250px;
+  transition: border-color 0.3s, width 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #D4A373;
+  width: 300px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn--icon {
+  background: none;
+  font-size: 18px;
+  padding: 8px 12px;
+  border-radius: 50%;
+  background: #FFF8F0;
+  border: 2px solid #E8E0D8;
+}
+
+.btn--icon:hover {
+  background: #F5E6D3;
+  border-color: #D4A373;
+}
+
+.btn--primary {
+  background: #D4A373;
+  color: #fff;
+  font-size: 16px;
+  padding: 14px 30px;
+}
+
+.btn--primary:hover {
+  background: #C08D5E;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 163, 115, 0.4);
+}
+
+.btn--outline {
+  background: transparent;
+  color: #D4A373;
+  border: 2px solid #D4A373;
+  font-size: 16px;
+  padding: 12px 28px;
+}
+
+.btn--outline:hover {
+  background: #D4A373;
+  color: #fff;
+}
+
+/* ===== HERO ===== */
+.hero {
+  background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 100%);
+  padding: 80px 0;
+  text-align: center;
+}
+
+.hero__title {
+  font-size: 48px;
+  margin-bottom: 20px;
+  color: #2D2D2D;
+}
+
+.highlight {
+  color: #D4A373;
+}
+
+.hero__subtitle {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 30px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero__inner .btn {
+  margin: 5px 10px;
+}
+
+/* ===== ФИЛЬТРЫ ===== */
+.filters {
+  padding: 40px 0;
+  background: #fff;
+}
+
+.section-title {
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2D2D2D;
+}
+
+.filters__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.filter-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-btn {
+  padding: 8px 14px;
+  border: 2px solid #E8E0D8;
+  border-radius: 20px;
+  background: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #555;
+}
+
+.filter-btn:hover {
+  border-color: #D4A373;
+  color: #D4A373;
+}
+
+.filter-btn.active {
+  background: #D4A373;
+  color: #fff;
+  border-color: #D4A373;
+}
+
+/* ===== КАТАЛОГ ===== */
+.catalog {
+  padding: 20px 0 60px;
+}
+
+.catalog__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.results-count {
+  color: #888;
+  font-size: 14px;
+}
+
+.breed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+/* ===== КАРТОЧКА ПОРОДЫ ===== */
+.breed-card {
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.breed-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.breed-card__image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.breed-card__body {
+  padding: 18px;
+}
+
+.breed-card__title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: #2D2D2D;
+}
+
+.breed-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.breed-card__tag {
+  background: #F5E6D3;
+  color: #8B6F47;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.breed-card__desc {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.breed-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.breed-card__rating {
+  color: #D4A373;
+  font-size: 14px;
+}
+
+.breed-card__fav {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.breed-card__fav:hover {
+  transform: scale(1.2);
+}
+
+.breed-card__fav.active {
+  color: #E74C3C;
+}
+
+/* ===== МОДАЛЬНОЕ ОКНО ===== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+
+.modal__content {
+  position: relative;
+  background: #fff;
+  border-radius: 20px;
+  max-width: 700px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 30px;
+  z-index: 1;
+  animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal__close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  transition: color 0.2s;
+}
+
+.modal__close:hover {
+  color: #333;
+}
+
+/* Детали породы в модалке */
+.breed-detail__image {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+
+.breed-detail__title {
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+.breed-detail__rating {
+  color: #D4A373;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.breed-detail__info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.breed-detail__info-item {
+  background: #FFF8F0;
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+
+.breed-detail__info-label {
+  font-size: 12px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.breed-detail__info-value {
+  font-weight: 700;
+  font-size: 16px;
+  margin-top: 3px;
+}
+
+.breed-detail__section {
+  margin-bottom: 20px;
+}
+
+.breed-detail__section h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #D4A373;
+}
+
+.breed-detail__section p {
+  color: #555;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.breed-detail__pros-cons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.breed-detail__pros h4,
+.breed-detail__cons h4 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.breed-detail__pros h4 { color: #7CB342; }
+.breed-detail__cons h4 { color: #E74C3C; }
+
+.breed-detail__pros ul,
+.breed-detail__cons ul {
+  list-style: none;
+  padding: 0;
+}
+
+.breed-detail__pros li,
+.breed-detail__cons li {
+  padding: 4px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+/* ===== ПОДВАЛ ===== */
+.footer {
+  background: #2D2D2D;
+  color: #aaa;
+  padding: 30px 0;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* ===== АДАПТИВНОСТЬ ===== */
+@media screen and (max-width: 768px) {
+  .header__inner {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-input {
+    width: 180px;
+  }
+
+  .search-input:focus {
+    width: 220px;
+  }
+
+  .hero__title {
+    font-size: 32px;
+  }
+
+  .hero__subtitle {
+    font-size: 16px;
+  }
+
+  .hero__inner .btn {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .filters__row {
+    flex-direction: column;
+  }
+
+  .breed-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .breed-detail__info {
+    grid-template-columns: 1fr;
+  }
+
+  .breed-detail__pros-cons {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .hero {
+    padding: 50px 0;
+  }
+
+  .hero__title {
+    font-size: 26px;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+
+  .breed-card__image {
+    height: 180px;
+  }
+}

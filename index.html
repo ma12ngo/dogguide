@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DogGuide — подбор породы собаки</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Подключаем шрифты -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== ШАПКА ===== -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="#" class="logo">🐕 DogGuide</a>
+      <div class="header__actions">
+        <div class="search-wrapper">
+          <input type="text" id="searchInput" class="search-input" placeholder="Поиск породы..." />
+          <span class="search-icon">🔍</span>
+        </div>
+        <button id="favoritesBtn" class="btn btn--icon" title="Избранное">❤️ <span id="favoritesCount">0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== HERO-СЕКЦИЯ ===== -->
+  <section class="hero">
+    <div class="container hero__inner">
+      <h1 class="hero__title">Найди своего <span class="highlight">идеального друга</span> 🐕</h1>
+      <p class="hero__subtitle">Ответь на 5 вопросов — и мы подберём породу, которая подходит именно тебе</p>
+      <button id="startTestBtn" class="btn btn--primary">🎯 Пройти тест-подбор</button>
+      <button id="scrollToCatalog" class="btn btn--outline">👀 Смотреть все породы</button>
+    </div>
+  </section>
+
+  <!-- ===== ФИЛЬТРЫ ===== -->
+  <section class="filters" id="catalog">
+    <div class="container">
+      <h2 class="section-title">Каталог пород</h2>
+      <div class="filters__row">
+        <!-- Размер -->
+        <div class="filter-group">
+          <label class="filter-label">Размер</label>
+          <div class="filter-btns" id="sizeFilter">
+            <button class="filter-btn active" data-value="all">Все</button>
+            <button class="filter-btn" data-value="small">🐾 Маленькая</button>
+            <button class="filter-btn" data-value="medium">🐾 Средняя</button>
+            <button class="filter-btn" data-value="large">🐾 Большая</button>
+          </div>
+        </div>
+        <!-- Активность -->
+        <div class="filter-group">
+          <label class="filter-label">Активность</label>
+          <div class="filter-btns" id="activityFilter">
+            <button class="filter-btn active" data-value="all">Любая</button>
+            <button class="filter-btn" data-value="low">🛋 Низкая</button>
+            <button class="filter-btn" data-value="medium">🚶 Средняя</button>
+            <button class="filter-btn" data-value="high">🏃 Высокая</button>
+          </div>
+        </div>
+        <!-- Шерсть -->
+        <div class="filter-group">
+          <label class="filter-label">Шерсть</label>
+          <div class="filter-btns" id="coatFilter">
+            <button class="filter-btn active" data-value="all">Любая</button>
+            <button class="filter-btn" data-value="short">✂️ Короткая</button>
+            <button class="filter-btn" data-value="long">💇 Длинная</button>
+            <button class="filter-btn" data-value="hypoallergenic">✅ Гипоаллергенная</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== КАТАЛОГ ===== -->
+  <section class="catalog">
+    <div class="container">
+      <div class="catalog__header">
+        <p id="resultsCount" class="results-count">Найдено: <span id="count">0</span> пород</p>
+      </div>
+      <div id="breedList" class="breed-grid">
+        <!-- Карточки будут сгенерированы через JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== МОДАЛЬНОЕ ОКНО (детали породы) ===== -->
+  <div id="breedModal" class="modal">
+    <div class="modal__overlay" id="modalOverlay"></div>
+    <div class="modal__content">
+      <button class="modal__close" id="modalClose">&times;</button>
+      <div id="modalBody">
+        <!-- Заполняется через JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ПОДВАЛ ===== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>© 2026 DogGuide. Проект Долгановой Марии, МАОУ СОШ №88, Тюмень</p>
+    </div>
+  </footer>
+
+  <script src="breeds.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
