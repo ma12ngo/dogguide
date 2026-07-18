@@ -1027,14 +1027,12 @@ img {
   animation: thanksPop 0.5s ease;
 }
 
-.donate-block__card {
-  color: var(--accent);
-  font-size: 13px;
-  font-weight: 600;
-  margin-top: 4px;
+.donate-block__hint {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: 6px;
   font-family: monospace;
-  letter-spacing: 1px;
-  animation: thanksPop 0.5s ease;
+  letter-spacing: 0.5px;
 }
 
 @keyframes thanksPop {

@@ -583,7 +583,6 @@ const fullnessText = document.getElementById("fullnessText");
 const donateDog = document.getElementById("donateDog");
 const bowlFood = document.getElementById("bowlFood");
 const donateThanks = document.getElementById("donateThanks");
-const donateCard = document.getElementById("donateCard");
 const CARD_NUMBER = "2202 2083 5639 3273";
 
 let fullness = parseInt(localStorage.getItem("dogguide_fullness")) || 0;
@@ -607,8 +606,6 @@ function updateFullness() {
 updateFullness();
 
 donateBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-
   // Копируем номер карты в буфер
   navigator.clipboard.writeText(CARD_NUMBER).catch(() => {});
 
@@ -622,13 +619,9 @@ donateBtn.addEventListener("click", (e) => {
   donateCount++;
   updateFullness();
 
-  // Показываем номер карты
-  donateCard.style.display = "block";
+  // Показываем "Спасибо"
   donateThanks.style.display = "block";
-  setTimeout(() => {
-    donateThanks.style.display = "none";
-    donateCard.style.display = "none";
-  }, 3000);
+  setTimeout(() => { donateThanks.style.display = "none"; }, 3000);
 
   // Виляние хвостом после прыжка
   setTimeout(() => {
