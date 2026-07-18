@@ -98,6 +98,183 @@
     </div>
   </div>
 
+  <!-- ===== МОДАЛКА ТЕСТА-ПОДБОРА ===== -->
+  <div id="testModal" class="modal">
+    <div class="modal__overlay" id="testOverlay"></div>
+    <div class="modal__content modal__content--test">
+      <button class="modal__close" id="testClose">&times;</button>
+      <div id="testBody">
+        <!-- Шаг 1: Приветствие -->
+        <div id="testStep0" class="test-step test-step--active">
+          <div class="test-hero">
+            <span class="test-hero__icon">🐕</span>
+            <h2 class="test-hero__title">Подбор породы</h2>
+            <p class="test-hero__desc">Ответь на 5 вопросов, и я подберу идеальную породу для тебя!</p>
+            <button class="btn btn--primary" id="testStart">Начать тест →</button>
+          </div>
+        </div>
+
+        <!-- Шаг 1: Размер -->
+        <div id="testStep1" class="test-step">
+          <div class="test-question">
+            <span class="test-question__number">1 / 5</span>
+            <h3 class="test-question__title">Какой размер собаки тебе подходит?</h3>
+            <div class="test-options">
+              <label class="test-option">
+                <input type="radio" name="q1" value="small" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🐾</span>
+                  <span class="test-option__label">Маленькая</span>
+                  <span class="test-option__desc">до 10 кг, удобно в квартире</span>
+                </span>
+              </label>
+              <label class="test-option">
+                <input type="radio" name="q1" value="medium" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🐾</span>
+                  <span class="test-option__label">Средняя</span>
+                  <span class="test-option__desc">10–25 кг, золотая середина</span>
+                </span>
+              </label>
+              <label class="test-option">
+                <input type="radio" name="q1" value="large" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🐾</span>
+                  <span class="test-option__label">Большая</span>
+                  <span class="test-option__desc">от 25 кг, нужен простор</span>
+                </span>
+              </label>
+            </div>
+            <button class="btn btn--primary test-next" disabled data-next="2">Далее →</button>
+          </div>
+        </div>
+
+        <!-- Шаг 2: Активность -->
+        <div id="testStep2" class="test-step">
+          <div class="test-question">
+            <span class="test-question__number">2 / 5</span>
+            <h3 class="test-question__title">Сколько времени готов(а) гулять?</h3>
+            <div class="test-options">
+              <label class="test-option">
+                <input type="radio" name="q2" value="low" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🛋</span>
+                  <span class="test-option__label">Минимум</span>
+                  <span class="test-option__desc">15–20 мин в день, больше лежать</span>
+                </span>
+              </label>
+              <label class="test-option">
+                <input type="radio" name="q2" value="medium" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🚶</span>
+                  <span class="test-option__label">Умеренно</span>
+                  <span class="test-option__desc">30–60 мин в день</span>
+                </span>
+              </label>
+              <label class="test-option">
+                <input type="radio" name="q2" value="high" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🏃</span>
+                  <span class="test-option__label">Очень активно</span>
+                  <span class="test-option__desc">1–2 часа бега и игр</span>
+                </span>
+              </label>
+            </div>
+            <button class="btn btn--primary test-next" disabled data-next="3">Далее →</button>
+          </div>
+        </div>
+
+        <!-- Шаг 3: Квартира -->
+        <div id="testStep3" class="test-step">
+          <div class="test-question">
+            <span class="test-question__number">3 / 5</span>
+            <h3 class="test-question__title">Где ты живёшь?</h3>
+            <div class="test-options">
+              <label class="test-option">
+                <input type="radio" name="q3" value="apartment" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🏢</span>
+                  <span class="test-option__label">Квартира</span>
+                  <span class="test-option__desc">Нужна порода, которой хватит места</span>
+                </span>
+              </label>
+              <label class="test-option">
+                <input type="radio" name="q3" value="house" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🏡</span>
+                  <span class="test-option__label">Частный дом</span>
+                  <span class="test-option__desc">Есть двор и больше пространства</span>
+                </span>
+              </label>
+            </div>
+            <button class="btn btn--primary test-next" disabled data-next="4">Далее →</button>
+          </div>
+        </div>
+
+        <!-- Шаг 4: Дети -->
+        <div id="testStep4" class="test-step">
+          <div class="test-question">
+            <span class="test-question__number">4 / 5</span>
+            <h3 class="test-question__title">Есть ли в семье маленькие дети?</h3>
+            <div class="test-options">
+              <label class="test-option">
+                <input type="radio" name="q4" value="yes" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">👶</span>
+                  <span class="test-option__label">Да</span>
+                  <span class="test-option__desc">Нужна терпеливая и нежная порода</span>
+                </span>
+              </label>
+              <label class="test-option">
+                <input type="radio" name="q4" value="no" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🧑</span>
+                  <span class="test-option__label">Нет</span>
+                  <span class="test-option__desc">Детей нет, живут взрослые</span>
+                </span>
+              </label>
+            </div>
+            <button class="btn btn--primary test-next" disabled data-next="5">Далее →</button>
+          </div>
+        </div>
+
+        <!-- Шаг 5: Аллергия -->
+        <div id="testStep5" class="test-step">
+          <div class="test-question">
+            <span class="test-question__number">5 / 5</span>
+            <h3 class="test-question__title">Есть ли аллергия на шерсть?</h3>
+            <div class="test-options">
+              <label class="test-option">
+                <input type="radio" name="q5" value="yes" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🤧</span>
+                  <span class="test-option__label">Да</span>
+                  <span class="test-option__desc">Нужна гипоаллергенная порода</span>
+                </span>
+              </label>
+              <label class="test-option">
+                <input type="radio" name="q5" value="no" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">✅</span>
+                  <span class="test-option__label">Нет</span>
+                  <span class="test-option__desc">Аллергии нет, любая шерсть подойдёт</span>
+                </span>
+              </label>
+            </div>
+            <button class="btn btn--primary test-next" disabled data-next="result">Узнать результат →</button>
+          </div>
+        </div>
+
+        <!-- Результат -->
+        <div id="testStepResult" class="test-step">
+          <div class="test-result" id="testResultContent">
+            <!-- Заполняется через JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== ПОДВАЛ ===== -->
   <footer class="footer">
     <div class="container footer__inner">
