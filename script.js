@@ -14,92 +14,96 @@ const startTestBtn = document.getElementById("startTestBtn");
 const scrollToCatalog = document.getElementById("scrollToCatalog");
 
 // --- Состояние ---
-let currentFilters = {
-  size: "all",
-  activity: "all",
-  coat: "all"
-};
+let currentFilters = { size: "all", activity: "all", coat: "all" };
 let searchQuery = "";
+let showFavoritesOnly = false;
 let favorites = JSON.parse(localStorage.getItem("dogguide_favorites")) || [];
 
-// --- Сохраняем избранное ---
+// --- Избранное ---
 function saveFavorites() {
   localStorage.setItem("dogguide_favorites", JSON.stringify(favorites));
   favoritesCount.textContent = favorites.length;
 }
 
-// --- Переключение избранного ---
 function toggleFavorite(breedId) {
   const idx = favorites.indexOf(breedId);
-  if (idx === -1) {
-    favorites.push(breedId);
-  } else {
-    favorites.splice(idx, 1);
-  }
+  if (idx === -1) favorites.push(breedId);
+  else favorites.splice(idx, 1);
   saveFavorites();
-  renderBreeds(); // перерисовываем, чтобы обновить иконки
+  renderBreeds();
 }
 
 // --- Фильтрация ---
 function getFilteredBreeds() {
-  return breeds.filter(breed => {
-    // Поиск
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      if (!breed.name.toLowerCase().includes(q) &&
-          !breed.description.toLowerCase().includes(q)) {
-        return false;
-      }
+  let result = breeds;
+
+  // Режим "только избранное"
+  if (showFavoritesOnly) {
+    result = result.filter(b => favorites.includes(b.id));
+    if (result.length === 0) return result;
+  }
+
+  // Поиск
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    result = result.filter(b =>
+      b.name.toLowerCase().includes(q) ||
+      b.description.toLowerCase().includes(q)
+    );
+  }
+
+  // Размер
+  if (currentFilters.size !== "all") {
+    result = result.filter(b => b.size === currentFilters.size);
+  }
+
+  // Активность
+  if (currentFilters.activity !== "all") {
+    result = result.filter(b => b.activity === currentFilters.activity);
+  }
+
+  // Шерсть
+  if (currentFilters.coat !== "all") {
+    if (currentFilters.coat === "hypoallergenic") {
+      result = result.filter(b => b.hypoallergenic);
+    } else {
+      result = result.filter(b => b.coat === currentFilters.coat);
     }
-    // Размер
-    if (currentFilters.size !== "all" && breed.size !== currentFilters.size) {
-      return false;
-    }
-    // Активность
-    if (currentFilters.activity !== "all" && breed.activity !== currentFilters.activity) {
-      return false;
-    }
-    // Шерсть
-    if (currentFilters.coat !== "all") {
-      if (currentFilters.coat === "hypoallergenic" && !breed.hypoallergenic) {
-        return false;
-      }
-      if (currentFilters.coat !== "hypoallergenic" && breed.coat !== currentFilters.coat) {
-        return false;
-      }
-    }
-    return true;
-  });
+  }
+
+  return result;
 }
 
-// --- Отрисовка карточек ---
+// --- Вспомогательные функции ---
+function getSizeLabel(size) {
+  return { small: "🐾 Маленькая", medium: "🐾 Средняя", large: "🐾 Большая" }[size] || size;
+}
+function getActivityLabel(activity) {
+  return { low: "🛋 Низкая", medium: "🚶 Средняя", high: "🏃 Высокая" }[activity] || activity;
+}
+function getCoatLabel(coat) {
+  return { short: "✂️ Короткая", long: "💇 Длинная" }[coat] || coat;
+}
+
+function starsHTML(rating) {
+  return "★".repeat(Math.floor(rating)) + (rating % 1 >= 0.5 ? "½" : "");
+}
+
+// --- Отрисовка карточек (только HTML, без событий!) ---
 function renderBreeds() {
   const filtered = getFilteredBreeds();
   countEl.textContent = filtered.length;
 
   if (filtered.length === 0) {
-    breedList.innerHTML = `
-      <div class="no-results">
-        <p style="text-align:center;padding:60px 20px;color:#999;font-size:18px;">
-          😕 Ничего не найдено. Попробуй изменить фильтры.
-        </p>
-      </div>
-    `;
+    breedList.innerHTML = `<p style="text-align:center;padding:60px 20px;color:#999;font-size:18px;">😕 Ничего не найдено. Попробуй изменить фильтры.</p>`;
     return;
   }
 
   breedList.innerHTML = filtered.map(breed => {
     const isFav = favorites.includes(breed.id);
-    const stars = "★".repeat(Math.floor(breed.rating)) + (breed.rating % 1 >= 0.5 ? "½" : "");
-
     return `
       <div class="breed-card" data-id="${breed.id}">
-        <img
-          src="${breed.image}"
-          alt="${breed.name}"
-          class="breed-card__image"
-          loading="lazy"
-        />
+        <img src="${breed.image}" alt="${breed.name}" class="breed-card__image" loading="lazy" />
         <div class="breed-card__body">
           <h3 class="breed-card__title">${breed.name}</h3>
           <div class="breed-card__tags">
@@ -110,61 +114,39 @@ function renderBreeds() {
           </div>
           <p class="breed-card__desc">${breed.description}</p>
           <div class="breed-card__footer">
-            <span class="breed-card__rating">${stars}</span>
-            <button class="breed-card__fav ${isFav ? 'active' : ''}" data-id="${breed.id}" title="В избранное">
-              ${isFav ? '❤️' : '🤍'}
-            </button>
+            <span class="breed-card__rating">${starsHTML(breed.rating)}</span>
+            <button class="breed-card__fav ${isFav ? 'active' : ''}" data-id="${breed.id}" title="В избранное">${isFav ? '❤️' : '🤍'}</button>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join("");
-
-  // --- События на карточках ---
-  document.querySelectorAll(".breed-card").forEach(card => {
-    card.addEventListener("click", (e) => {
-      // Не открываем модалку, если кликнули по кнопке избранного
-      if (e.target.closest(".breed-card__fav")) return;
-      const id = parseInt(card.dataset.id);
-      const breed = breeds.find(b => b.id === id);
-      if (breed) openModal(breed);
-    });
-  });
-
-  document.querySelectorAll(".breed-card__fav").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const id = parseInt(btn.dataset.id);
-      toggleFavorite(id);
-    });
-  });
 }
 
-// --- Вспомогательные функции для подписей ---
-function getSizeLabel(size) {
-  const map = { small: "🐾 Маленькая", medium: "🐾 Средняя", large: "🐾 Большая" };
-  return map[size] || size;
-}
+// --- Делегирование событий (один обработчик на весь список!) ---
+breedList.addEventListener("click", (e) => {
+  const card = e.target.closest(".breed-card");
+  if (!card) return;
 
-function getActivityLabel(activity) {
-  const map = { low: "🛋 Низкая", medium: "🚶 Средняя", high: "🏃 Высокая" };
-  return map[activity] || activity;
-}
+  const id = parseInt(card.dataset.id);
+  const breed = breeds.find(b => b.id === id);
+  if (!breed) return;
 
-function getCoatLabel(coat) {
-  const map = { short: "✂️ Короткая", long: "💇 Длинная" };
-  return map[coat] || coat;
-}
+  // Клик по кнопке избранного
+  if (e.target.closest(".breed-card__fav")) {
+    toggleFavorite(id);
+    return;
+  }
+
+  // Клик по карточке — открыть модалку
+  openModal(breed);
+});
 
 // --- Модальное окно ---
 function openModal(breed) {
-  const stars = "★".repeat(Math.floor(breed.rating)) + (breed.rating % 1 >= 0.5 ? "½" : "");
-
   modalBody.innerHTML = `
     <img src="${breed.image}" alt="${breed.name}" class="breed-detail__image" />
     <h2 class="breed-detail__title">${breed.name}</h2>
-    <div class="breed-detail__rating">${stars} (${breed.rating})</div>
-
+    <div class="breed-detail__rating">${starsHTML(breed.rating)} (${breed.rating})</div>
     <div class="breed-detail__info">
       <div class="breed-detail__info-item">
         <div class="breed-detail__info-label">Размер</div>
@@ -191,34 +173,26 @@ function openModal(breed) {
         <div class="breed-detail__info-value">${getCoatLabel(breed.coat)}</div>
       </div>
     </div>
-
     <div class="breed-detail__section">
       <h3>📖 Характер</h3>
       <p>${breed.character}</p>
     </div>
-
     <div class="breed-detail__section">
       <h3>🎯 Кому подходит</h3>
       <p>${breed.suitableFor}</p>
     </div>
-
     <div class="breed-detail__section">
       <div class="breed-detail__pros-cons">
         <div class="breed-detail__pros">
           <h4>✅ Плюсы</h4>
-          <ul>
-            ${breed.pros.map(p => `<li>✓ ${p}</li>`).join("")}
-          </ul>
+          <ul>${breed.pros.map(p => `<li>✓ ${p}</li>`).join("")}</ul>
         </div>
         <div class="breed-detail__cons">
           <h4>❌ Минусы</h4>
-          <ul>
-            ${breed.cons.map(c => `<li>✗ ${c}</li>`).join("")}
-          </ul>
+          <ul>${breed.cons.map(c => `<li>✗ ${c}</li>`).join("")}</ul>
         </div>
       </div>
-    </div>
-  `;
+    </div>`;
 
   modal.classList.add("active");
   document.body.style.overflow = "hidden";
@@ -229,100 +203,49 @@ function closeModal() {
   document.body.style.overflow = "";
 }
 
-// --- События модалки ---
 modalClose.addEventListener("click", closeModal);
 modalOverlay.addEventListener("click", closeModal);
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeModal();
-});
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
-// --- Фильтры ---
+// --- Фильтры (делегирование) ---
 document.querySelectorAll(".filter-btns").forEach(group => {
   group.addEventListener("click", (e) => {
     const btn = e.target.closest(".filter-btn");
     if (!btn) return;
 
-    // Убираем active у всех кнопок в группе
     group.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
-    // Определяем, какой фильтр обновить
-    const parent = group.closest(".filter-group");
-    const label = parent.querySelector(".filter-label").textContent.trim();
+    const label = group.closest(".filter-group").querySelector(".filter-label").textContent.trim();
+    const key = { "Размер": "size", "Активность": "activity", "Шерсть": "coat" }[label];
+    if (!key) return;
 
-    const filterMap = {
-      "Размер": "size",
-      "Активность": "activity",
-      "Шерсть": "coat"
-    };
-
-    const filterKey = filterMap[label];
-    if (filterKey) {
-      currentFilters[filterKey] = btn.dataset.value;
-      renderBreeds();
-    }
+    currentFilters[key] = btn.dataset.value;
+    showFavoritesOnly = false; // сбрасываем режим избранного при клике на фильтр
+    renderBreeds();
   });
 });
 
 // --- Поиск ---
 searchInput.addEventListener("input", (e) => {
   searchQuery = e.target.value;
+  showFavoritesOnly = false;
   renderBreeds();
 });
 
-// --- Показать избранное ---
+// --- Избранное ---
 favoritesBtn.addEventListener("click", () => {
   if (favorites.length === 0) {
     alert("😕 У тебя пока нет избранных пород. Нажми 🤍 на карточке, чтобы добавить!");
     return;
   }
-
-  // Показываем только избранные
-  const favBreeds = breeds.filter(b => favorites.includes(b.id));
-  countEl.textContent = favBreeds.length;
-
-  breedList.innerHTML = favBreeds.map(breed => {
-    const stars = "★".repeat(Math.floor(breed.rating)) + (breed.rating % 1 >= 0.5 ? "½" : "");
-    return `
-      <div class="breed-card" data-id="${breed.id}">
-        <img src="${breed.image}" alt="${breed.name}" class="breed-card__image" loading="lazy" />
-        <div class="breed-card__body">
-          <h3 class="breed-card__title">${breed.name}</h3>
-          <div class="breed-card__tags">
-            <span class="breed-card__tag">${getSizeLabel(breed.size)}</span>
-            <span class="breed-card__tag">${getActivityLabel(breed.activity)}</span>
-            <span class="breed-card__tag">${getCoatLabel(breed.coat)}</span>
-          </div>
-          <p class="breed-card__desc">${breed.description}</p>
-          <div class="breed-card__footer">
-            <span class="breed-card__rating">${stars}</span>
-            <button class="breed-card__fav active" data-id="${breed.id}">❤️</button>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join("");
-
-  // Вешаем события заново
-  document.querySelectorAll(".breed-card").forEach(card => {
-    card.addEventListener("click", (e) => {
-      if (e.target.closest(".breed-card__fav")) return;
-      const id = parseInt(card.dataset.id);
-      const breed = breeds.find(b => b.id === id);
-      if (breed) openModal(breed);
-    });
-  });
-
-  document.querySelectorAll(".breed-card__fav").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const id = parseInt(btn.dataset.id);
-      toggleFavorite(id);
-    });
-  });
+  showFavoritesOnly = !showFavoritesOnly;
+  favoritesBtn.style.background = showFavoritesOnly ? "#F5E6D3" : "";
+  favoritesBtn.style.borderColor = showFavoritesOnly ? "#D4A373" : "";
+  renderBreeds();
 });
 
-// --- Скролл к каталогу ---
+// --- Скролл ---
 scrollToCatalog.addEventListener("click", () => {
   document.getElementById("catalog").scrollIntoView({ behavior: "smooth" });
 });
