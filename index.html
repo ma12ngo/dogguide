@@ -106,12 +106,18 @@
     <div class="modal__content modal__content--test">
       <button class="modal__close" id="testClose">&times;</button>
       <div id="testBody">
-        <!-- Шаг 1: Приветствие -->
+        <!-- Прогресс-бар -->
+        <div class="test-progress" id="testProgress">
+          <div class="test-progress__bar" id="testProgressBar"></div>
+          <div class="test-progress__dots" id="testProgressDots"></div>
+        </div>
+
+        <!-- Шаг 0: Приветствие -->
         <div id="testStep0" class="test-step test-step--active">
           <div class="test-hero">
             <span class="test-hero__icon">🐕</span>
             <h2 class="test-hero__title">Подбор породы</h2>
-            <p class="test-hero__desc">Ответь на 5 вопросов, и я подберу идеальную породу для тебя!</p>
+            <p class="test-hero__desc">Ответь на 7 вопросов — и я подберу <b>идеальную породу</b> с % совпадения!</p>
             <button class="btn btn--primary" id="testStart">Начать тест →</button>
           </div>
         </div>
@@ -119,7 +125,7 @@
         <!-- Шаг 1: Размер -->
         <div id="testStep1" class="test-step">
           <div class="test-question">
-            <span class="test-question__number">1 / 5</span>
+            <span class="test-question__number">1 / 7</span>
             <h3 class="test-question__title">Какой размер собаки тебе подходит?</h3>
             <div class="test-options">
               <label class="test-option">
@@ -147,14 +153,17 @@
                 </span>
               </label>
             </div>
-            <button class="btn btn--primary test-next" disabled data-next="2">Далее →</button>
+            <div class="test-nav">
+              <button class="btn btn--outline test-prev" style="visibility:hidden" data-prev="0">← Назад</button>
+              <button class="btn btn--primary test-next" disabled data-next="2">Далее →</button>
+            </div>
           </div>
         </div>
 
         <!-- Шаг 2: Активность -->
         <div id="testStep2" class="test-step">
           <div class="test-question">
-            <span class="test-question__number">2 / 5</span>
+            <span class="test-question__number">2 / 7</span>
             <h3 class="test-question__title">Сколько времени готов(а) гулять?</h3>
             <div class="test-options">
               <label class="test-option">
@@ -182,14 +191,17 @@
                 </span>
               </label>
             </div>
-            <button class="btn btn--primary test-next" disabled data-next="3">Далее →</button>
+            <div class="test-nav">
+              <button class="btn btn--outline test-prev" data-prev="1">← Назад</button>
+              <button class="btn btn--primary test-next" disabled data-next="3">Далее →</button>
+            </div>
           </div>
         </div>
 
-        <!-- Шаг 3: Квартира -->
+        <!-- Шаг 3: Жильё -->
         <div id="testStep3" class="test-step">
           <div class="test-question">
-            <span class="test-question__number">3 / 5</span>
+            <span class="test-question__number">3 / 7</span>
             <h3 class="test-question__title">Где ты живёшь?</h3>
             <div class="test-options">
               <label class="test-option">
@@ -209,14 +221,17 @@
                 </span>
               </label>
             </div>
-            <button class="btn btn--primary test-next" disabled data-next="4">Далее →</button>
+            <div class="test-nav">
+              <button class="btn btn--outline test-prev" data-prev="2">← Назад</button>
+              <button class="btn btn--primary test-next" disabled data-next="4">Далее →</button>
+            </div>
           </div>
         </div>
 
         <!-- Шаг 4: Дети -->
         <div id="testStep4" class="test-step">
           <div class="test-question">
-            <span class="test-question__number">4 / 5</span>
+            <span class="test-question__number">4 / 7</span>
             <h3 class="test-question__title">Есть ли в семье маленькие дети?</h3>
             <div class="test-options">
               <label class="test-option">
@@ -236,14 +251,17 @@
                 </span>
               </label>
             </div>
-            <button class="btn btn--primary test-next" disabled data-next="5">Далее →</button>
+            <div class="test-nav">
+              <button class="btn btn--outline test-prev" data-prev="3">← Назад</button>
+              <button class="btn btn--primary test-next" disabled data-next="5">Далее →</button>
+            </div>
           </div>
         </div>
 
         <!-- Шаг 5: Аллергия -->
         <div id="testStep5" class="test-step">
           <div class="test-question">
-            <span class="test-question__number">5 / 5</span>
+            <span class="test-question__number">5 / 7</span>
             <h3 class="test-question__title">Есть ли аллергия на шерсть?</h3>
             <div class="test-options">
               <label class="test-option">
@@ -263,7 +281,86 @@
                 </span>
               </label>
             </div>
-            <button class="btn btn--primary test-next" disabled data-next="result">Узнать результат →</button>
+            <div class="test-nav">
+              <button class="btn btn--outline test-prev" data-prev="4">← Назад</button>
+              <button class="btn btn--primary test-next" disabled data-next="6">Далее →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Шаг 6: Опыт -->
+        <div id="testStep6" class="test-step">
+          <div class="test-question">
+            <span class="test-question__number">6 / 7</span>
+            <h3 class="test-question__title">У тебя был опыт содержания собак?</h3>
+            <div class="test-options">
+              <label class="test-option">
+                <input type="radio" name="q6" value="beginner" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🐶</span>
+                  <span class="test-option__label">Новичок</span>
+                  <span class="test-option__desc">Первая собака, буду учиться</span>
+                </span>
+              </label>
+              <label class="test-option">
+                <input type="radio" name="q6" value="intermediate" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🐕</span>
+                  <span class="test-option__label">Был опыт</span>
+                  <span class="test-option__desc">Уже были собаки, знаю основы</span>
+                </span>
+              </label>
+              <label class="test-option">
+                <input type="radio" name="q6" value="advanced" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🦮</span>
+                  <span class="test-option__label">Опытный</span>
+                  <span class="test-option__desc">Дрессировал(а), готов(а) к сложным</span>
+                </span>
+              </label>
+            </div>
+            <div class="test-nav">
+              <button class="btn btn--outline test-prev" data-prev="5">← Назад</button>
+              <button class="btn btn--primary test-next" disabled data-next="7">Далее →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Шаг 7: Груминг -->
+        <div id="testStep7" class="test-step">
+          <div class="test-question">
+            <span class="test-question__number">7 / 7</span>
+            <h3 class="test-question__title">Готов(а) ухаживать за шерстью?</h3>
+            <div class="test-options">
+              <label class="test-option">
+                <input type="radio" name="q7" value="low" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">💁</span>
+                  <span class="test-option__label">Минимум</span>
+                  <span class="test-option__desc">Расчесать раз в неделю — ок</span>
+                </span>
+              </label>
+              <label class="test-option">
+                <input type="radio" name="q7" value="medium" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">🪮</span>
+                  <span class="test-option__label">Умеренно</span>
+                  <span class="test-option__desc">Могу расчёсывать пару раз в неделю</span>
+                </span>
+              </label>
+              <label class="test-option">
+                <input type="radio" name="q7" value="high" />
+                <span class="test-option__content">
+                  <span class="test-option__icon">✂️</span>
+                  <span class="test-option__label">Готов(а) к сложному уходу</span>
+                  <span class="test-option__desc">Ежедневный груминг не проблема</span>
+                </span>
+              </label>
+            </div>
+            <div class="test-nav">
+              <button class="btn btn--outline test-prev" data-prev="6">← Назад</button>
+              <button class="btn btn--primary test-next" disabled data-next="result">🎯 Узнать результат!</button>
+            </div>
           </div>
         </div>
 

@@ -264,12 +264,17 @@ const testModal = document.getElementById("testModal");
 const testOverlay = document.getElementById("testOverlay");
 const testClose = document.getElementById("testClose");
 const testStart = document.getElementById("testStart");
+const testProgress = document.getElementById("testProgress");
+const testProgressBar = document.getElementById("testProgressBar");
+const testProgressDots = document.getElementById("testProgressDots");
 let testAnswers = {};
+const TOTAL_QUESTIONS = 7;
 
 function openTest() {
   testAnswers = {};
   document.querySelectorAll(".test-step").forEach(s => s.classList.remove("test-step--active"));
   document.getElementById("testStep0").classList.add("test-step--active");
+  updateProgress(0);
   testModal.classList.add("active");
   document.body.style.overflow = "hidden";
 }
@@ -282,110 +287,238 @@ function closeTest() {
 startTestBtn.addEventListener("click", openTest);
 testClose.addEventListener("click", closeTest);
 testOverlay.addEventListener("click", closeTest);
-
-// Начать тест
 testStart.addEventListener("click", () => goToStep(1));
 
-// Переключение шагов
+// Прогресс-бар
+function updateProgress(step) {
+  if (step === 0) {
+    testProgress.style.display = "none";
+    return;
+  }
+  testProgress.style.display = "block";
+  const pct = Math.round((step / TOTAL_QUESTIONS) * 100);
+  testProgressBar.style.setProperty("--pct", `${pct}%`);
+  testProgressBar.style.setProperty("width", `${pct}%`);
+
+  // Точки
+  testProgressDots.innerHTML = "";
+  for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+    const dot = document.createElement("span");
+    if (i === step) dot.className = "active";
+    else if (i < step) dot.className = "done";
+    testProgressDots.appendChild(dot);
+  }
+}
+
+// Навигация
 function goToStep(step) {
+  if (step === 0) {
+    document.querySelectorAll(".test-step").forEach(s => s.classList.remove("test-step--active"));
+    document.getElementById("testStep0").classList.add("test-step--active");
+    updateProgress(0);
+    return;
+  }
+
   document.querySelectorAll(".test-step").forEach(s => s.classList.remove("test-step--active"));
   const el = document.getElementById(`testStep${step}`);
   if (el) el.classList.add("test-step--active");
+  updateProgress(step);
 }
 
-// Выбор ответа — активируем кнопку Далее
-document.querySelectorAll(".test-option input").forEach(input => {
-  input.addEventListener("change", () => {
-    const question = input.name;
-    testAnswers[question] = input.value;
-    const btn = input.closest(".test-question").querySelector(".test-next");
-    btn.disabled = false;
-  });
+// Обработчики ответов (через делегирование на testBody)
+document.getElementById("testBody").addEventListener("change", (e) => {
+  const input = e.target.closest(".test-option input");
+  if (!input) return;
+
+  const question = input.name;
+  testAnswers[question] = input.value;
+
+  // Активируем кнопку "Далее" в текущем шаге
+  const step = input.closest(".test-step");
+  if (step) {
+    const nextBtn = step.querySelector(".test-next");
+    if (nextBtn) nextBtn.disabled = false;
+  }
 });
 
-// Кнопки Далее
-document.querySelectorAll(".test-next").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const next = btn.dataset.next;
+// Кнопки "Далее" и "Назад" (делегирование)
+document.getElementById("testBody").addEventListener("click", (e) => {
+  const nextBtn = e.target.closest(".test-next");
+  if (nextBtn && !nextBtn.disabled) {
+    const next = nextBtn.dataset.next;
     if (next === "result") {
       showTestResult();
     } else {
       goToStep(parseInt(next));
     }
-  });
+    return;
+  }
+
+  const prevBtn = e.target.closest(".test-prev");
+  if (prevBtn) {
+    const prev = parseInt(prevBtn.dataset.prev);
+    goToStep(prev);
+  }
 });
 
 // Показать результат
 function showTestResult() {
-  const q1 = testAnswers.q1; // размер
-  const q2 = testAnswers.q2; // активность
-  const q3 = testAnswers.q3; // квартира/дом
-  const q4 = testAnswers.q4; // дети
-  const q5 = testAnswers.q5; // аллергия
+  const answers = testAnswers;
 
-  // Оцениваем каждую породу
-  const scored = breeds.map(breed => {
-    let score = 0;
+  // 1. Жёсткие фильтры (отсеиваем неподходящие породы)
+  let candidates = [...breeds];
 
-    // Размер
-    if (breed.size === q1) score += 3;
-    else if ((q1 === "small" && breed.size === "medium") ||
-             (q1 === "medium" && breed.size === "small")) score += 1;
-    else if ((q1 === "small" && breed.size === "large") ||
-             (q1 === "large" && breed.size === "small")) score -= 2;
+  // Аллергия: если да — ТОЛЬКО гипоаллергенные
+  if (answers.q5 === "yes") {
+    candidates = candidates.filter(b => b.hypoallergenic);
+    if (candidates.length === 0) {
+      // Если ничего не осталось — показываем ближайшие гипоаллергенные
+      candidates = breeds.filter(b => b.hypoallergenic).length > 0
+        ? breeds.filter(b => b.hypoallergenic)
+        : breeds.filter(b => b.coat === "long" && !b.hypoallergenic); // Длинношёрстные линяют меньше
+    }
+  }
 
-    // Активность
-    if (breed.activity === q2) score += 3;
-    else if ((q2 === "low" && breed.activity === "medium") ||
-             (q2 === "medium" && breed.activity === "low")) score += 1;
-    else if ((q2 === "low" && breed.activity === "high") ||
-             (q2 === "high" && breed.activity === "low")) score -= 1;
-    else if ((q2 === "medium" && breed.activity === "high") ||
-             (q2 === "high" && breed.activity === "medium")) score -= 1;
+  // Квартира + не подходит: уменьшаем баллы жёстко
+  // (но не убираем полностью — вдруг человек готов мириться)
 
-    // Квартира
-    if (q3 === "apartment" && breed.goodForApartment) score += 2;
-    else if (q3 === "apartment" && !breed.goodForApartment) score -= 1;
-    else if (q3 === "house" && !breed.goodForApartment) score += 1;
+  // 2. Оценка в баллах (каждая порода получает % совпадения 0-100)
+  const scored = candidates.map(breed => {
+    let total = 0;
+    const maxScore = 3 + 3 + 2 + 2 + 3 + 2 + 2; // по макс. баллу на вопрос
+    const maxScorePerQuestion = { q1: 3, q2: 3, q3: 2, q4: 2, q5: 3, q6: 2, q7: 2 };
 
-    // Дети
-    if (q4 === "yes" && breed.goodWithKids) score += 2;
-    else if (q4 === "yes" && !breed.goodWithKids) score -= 1;
+    let qs = { q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0, q7: 0 };
 
-    // Аллергия
-    if (q5 === "yes" && breed.hypoallergenic) score += 3;
-    else if (q5 === "yes" && !breed.hypoallergenic) score -= 2;
+    // Размер (q1: small/medium/large)
+    if (breed.size === answers.q1) { qs.q1 = 3; total += 3; }
+    else if (
+      (answers.q1 === "small" && breed.size === "medium") ||
+      (answers.q1 === "medium" && breed.size === "small")
+    ) { qs.q1 = 1; total += 1; }
+    else if (
+      (answers.q1 === "small" && breed.size === "large") ||
+      (answers.q1 === "large" && breed.size === "small")
+    ) { qs.q1 = -2; total -= 2; }
 
-    return { breed, score };
+    // Активность (q2: low/medium/high)
+    if (breed.activity === answers.q2) { qs.q2 = 3; total += 3; }
+    else if (
+      (answers.q2 === "low" && breed.activity === "medium") ||
+      (answers.q2 === "medium" && breed.activity === "low")
+    ) { qs.q2 = 1; total += 1; }
+    else { qs.q2 = -1; total -= 1; }
+
+    // Жильё (q3: apartment/house)
+    if (answers.q3 === "apartment" && breed.goodForApartment) { qs.q3 = 2; total += 2; }
+    else if (answers.q3 === "apartment" && !breed.goodForApartment) { qs.q3 = -2; total -= 2; }
+    else if (answers.q3 === "house" && !breed.goodForApartment) { qs.q3 = 1; total += 1; }
+    else if (answers.q3 === "house") { qs.q3 = 1; total += 1; }
+
+    // Дети (q4: yes/no)
+    if (answers.q4 === "yes" && breed.goodWithKids) { qs.q4 = 2; total += 2; }
+    else if (answers.q4 === "yes" && !breed.goodWithKids) { qs.q4 = -2; total -= 2; }
+    else { qs.q4 = 1; total += 1; }
+
+    // Аллергия (q5: yes/no) — уже отфильтровано, но даём бонус
+    if (answers.q5 === "yes" && breed.hypoallergenic) { qs.q5 = 3; total += 3; }
+    else if (answers.q5 === "no") { qs.q5 = 1; total += 1; }
+
+    // Опыт (q6: beginner/intermediate/advanced)
+    if (breed.experience === answers.q6) { qs.q6 = 2; total += 2; }
+    else if (
+      (answers.q6 === "beginner" && breed.experience === "intermediate") ||
+      (answers.q6 === "intermediate" && breed.experience === "beginner")
+    ) { qs.q6 = 1; total += 1; }
+    else if (answers.q6 === "beginner" && breed.experience === "advanced") { qs.q6 = -2; total -= 2; }
+    else if (answers.q6 === "advanced" && breed.experience === "beginner") { qs.q6 = 1; total += 1; }
+
+    // Груминг (q7: low/medium/high)
+    if (breed.grooming === answers.q7) { qs.q7 = 2; total += 2; }
+    else if (
+      (answers.q7 === "low" && breed.grooming === "medium") ||
+      (answers.q7 === "medium" && breed.grooming === "low")
+    ) { qs.q7 = 1; total += 1; }
+    else { qs.q7 = -1; total -= 1; }
+
+    // Вычисляем процент совпадения: max возможный = sum(maxScorePerQuestion)
+    // Если total отрицательный — ставим 0
+    const rawPct = Math.max(0, Math.round((total / 17) * 100));
+
+    return { breed, score: total, pct: Math.min(rawPct, 100), details: qs };
   });
 
-  // Сортируем по убыванию баллов
-  scored.sort((a, b) => b.score - a.score);
-  const top = scored.filter(s => s.score > 0);
-  const display = top.length > 0 ? top.slice(0, 3) : scored.slice(0, 3);
+  // Сортируем по проценту
+  scored.sort((a, b) => b.pct - a.pct);
 
-  goToStep("Result");
+  // Топ-3 (минимум 60% или топ-3 в любом случае)
+  const top = scored.filter(s => s.pct >= 40);
+  const display = top.length >= 2 ? top.slice(0, 3) : scored.slice(0, 3);
+
+  goToStep(999);
+  document.getElementById("testStepResult").classList.add("test-step--active");
+  updateProgress(99);
 
   const content = document.getElementById("testResultContent");
   const restartBtn = document.getElementById("testRestart");
+
+  // Цвета для процентов
+  function pctColor(p) {
+    if (p >= 80) return "test-result__match--high";
+    if (p >= 55) return "test-result__match--medium";
+    return "test-result__match--low";
+  }
+  function barColor(p) {
+    if (p >= 80) return "#4CAF50";
+    if (p >= 55) return "#FF9800";
+    return "#E74C3C";
+  }
+  function getSizeLabel(s) {
+    return { small: "🐾 Маленькая", medium: "🐾 Средняя", large: "🐾 Большая" }[s] || s;
+  }
+  function getActivityLabel(a) {
+    return { low: "🛋 Низкая", medium: "🚶 Средняя", high: "🏃 Высокая" }[a] || a;
+  }
+  function getGroomingLabel(g) {
+    return { low: "💁 Простой", medium: "🪮 Средний", high: "✂️ Сложный" }[g] || g;
+  }
+  function getExperienceLabel(e) {
+    return { beginner: "🐶 Новичок", intermediate: "🐕 Был опыт", advanced: "🦮 Опытный" }[e] || e;
+  }
+
   content.innerHTML = `
     <h3 class="test-result__title">🎉 Твои идеальные породы!</h3>
-    <p class="test-result__subtitle">Мы подобрали ${display.length} пород${display.length > 1 ? "ы" : "у"}, которые тебе подходят</p>
+    <p class="test-result__subtitle">Мы подобрали ${display.length} пород${display.length > 1 ? "ы" : "у"} с % совпадения</p>
     <div class="test-result__cards">
-      ${display.map((item, i) => `
+      ${display.map((item, i) => {
+        const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉";
+        const pctClass = pctColor(item.pct);
+        return `
         <div class="test-result__card" data-id="${item.breed.id}">
           <img src="${item.breed.image}" alt="${item.breed.name}" />
           <div class="test-result__card-info">
-            <h4>${i === 0 ? "🥇 " : i === 1 ? "🥈 " : "🥉 "}${item.breed.name}</h4>
+            <h4>${medal} ${item.breed.name}</h4>
+            <div class="test-result__match ${pctClass}">${item.pct}% совпадения</div>
+            <div class="test-result__match-bar">
+              <div class="test-result__match-bar-fill" style="width:${item.pct}%;background:${barColor(item.pct)}"></div>
+            </div>
             <p>${item.breed.description}</p>
+            <div class="test-result__card-stats">
+              <span class="test-result__card-stat">${getSizeLabel(item.breed.size)}</span>
+              <span class="test-result__card-stat">${getActivityLabel(item.breed.activity)}</span>
+              <span class="test-result__card-stat">${getGroomingLabel(item.breed.grooming)}</span>
+              <span class="test-result__card-stat">${getExperienceLabel(item.breed.experience)}</span>
+              ${item.breed.hypoallergenic ? '<span class="test-result__card-stat" style="background:#E8F5E9;color:#4CAF50">✅ Гипоаллергенная</span>' : ''}
+            </div>
           </div>
-        </div>
-      `).join("")}
+        </div>`;
+      }).join("")}
     </div>
+    <p class="test-result__note">💡 Нажми на карточку, чтобы узнать подробнее о породе</p>
   `;
   restartBtn.style.display = "";
 
-  // Клик по карточке результата — открываем модалку породы
+  // Клик по карточке
   content.querySelectorAll(".test-result__card").forEach(card => {
     card.addEventListener("click", () => {
       const id = parseInt(card.dataset.id);
