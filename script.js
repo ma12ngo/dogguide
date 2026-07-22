@@ -331,13 +331,17 @@ function showTestResult() {
     if (breed.size === q1) score += 3;
     else if ((q1 === "small" && breed.size === "medium") ||
              (q1 === "medium" && breed.size === "small")) score += 1;
+    else if ((q1 === "small" && breed.size === "large") ||
+             (q1 === "large" && breed.size === "small")) score -= 2;
 
     // Активность
     if (breed.activity === q2) score += 3;
     else if ((q2 === "low" && breed.activity === "medium") ||
              (q2 === "medium" && breed.activity === "low")) score += 1;
-    else if (q2 === "low" && breed.activity === "high") score -= 1;
-    else if (q2 === "high" && breed.activity === "low") score -= 1;
+    else if ((q2 === "low" && breed.activity === "high") ||
+             (q2 === "high" && breed.activity === "low")) score -= 1;
+    else if ((q2 === "medium" && breed.activity === "high") ||
+             (q2 === "high" && breed.activity === "medium")) score -= 1;
 
     // Квартира
     if (q3 === "apartment" && breed.goodForApartment) score += 2;
